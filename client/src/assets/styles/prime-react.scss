@@ -1,0 +1,100 @@
+@use "./vars.scss" as vars;
+
+$effect3D: 3px;
+$amountHover: 5;
+$amountActive: 20;
+
+@mixin button() {
+	&-button {
+		background: vars.$primary;
+		border: none;
+		box-shadow: 0px $effect3D 0px
+			darken($color: vars.$primary, $amount: $amountActive);
+
+		&:hover {
+			background-color: darken(
+				$color: vars.$primary,
+				$amount: $amountHover
+			);
+		}
+
+		&:active {
+			transform: translateY($effect3D);
+			box-shadow: 0px 0px 0px
+				darken($color: vars.$primary, $amount: $amountActive);
+		}
+
+		&-outlined {
+			color: white;
+			background-color: rgba($color: white, $alpha: 0.04);
+			border: 3px solid rgba($color: white, $alpha: 0.03);
+			box-shadow: none;
+
+			&:hover {
+				background-color: rgba($color: white, $alpha: 0.06);
+			}
+		}
+
+		&.white {
+			$amountActive: 50;
+			background: white;
+
+			box-shadow: 0px $effect3D 0px
+				darken($color: white, $amount: $amountActive);
+
+			&:hover {
+				background-color: darken($color: white, $amount: $amountHover);
+			}
+
+			&:active {
+				transform: translateY($effect3D);
+				box-shadow: 0px 0px 0px
+					darken($color: white, $amount: $amountActive);
+			}
+		}
+	}
+}
+
+@mixin input() {
+	&-inputtext {
+		background-color: rgba($color: white, $alpha: 0.15);
+		border: 2px solid transparent;
+		color: white;
+
+		&:hover {
+			background-color: rgba($color: white, $alpha: 0.2);
+		}
+
+		&:focus {
+			border-color: rgba($color: white, $alpha: 0.2);
+		}
+	}
+}
+
+.p {
+	&-component {
+		box-sizing: border-box;
+		border-radius: 0px;
+		border: none;
+		padding: 0.4rem 0.8rem;
+
+		&.p-password {
+			padding: 0;
+
+			&-input {
+				width: 100%;
+			}
+		}
+	}
+
+	&-icon-field {
+		width: 100%;
+
+		.p-input-icon {
+			top: 39%;
+		}
+	}
+
+	@include button;
+	@include input;
+}
