@@ -4,6 +4,7 @@ import {
 	FC,
 	FormEvent,
 	FormEventHandler,
+	useEffect,
 	useState,
 } from "react";
 import { jc } from "../../utils/joinClasses";
@@ -11,6 +12,8 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Link } from "react-router-dom";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { Message } from "primereact/message";
 
 interface Props {
 	className?: string;
@@ -32,13 +35,29 @@ export const AuthPage: FC<Props> = ({ className }) => {
 	const [isLogin, setIsLogin] = useState(true);
 	const [userData, setUserData] = useState<IUserData>(emptyUserData);
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = (
-		e: FormEvent<HTMLFormElement>
-	) => {
-		e.preventDefault();
-		console.log(userData);
-		setUserData(emptyUserData);
+	const {
+		handleSubmit,
+		reset,
+		control,
+		formState: { errors },
+	} = useForm<IUserData>({
+		defaultValues: emptyUserData,
+	});
+
+	const onSubmit: SubmitHandler<IUserData> = (data) => {
+		console.log(data);
+		reset();
 	};
+
+	console.log("errors", errors);
+
+	// const handleSubmit: FormEventHandler<HTMLFormElement> = (
+	// 	e: FormEvent<HTMLFormElement>
+	// ) => {
+	// 	e.preventDefault();
+	// 	console.log(userData);
+	// 	setUserData(emptyUserData);
+	// };
 
 	const handleChange: ChangeEventHandler<HTMLInputElement> = (
 		e: ChangeEvent<HTMLInputElement>
@@ -54,36 +73,130 @@ export const AuthPage: FC<Props> = ({ className }) => {
 			>
 				{!isLogin ? "Sign up" : "Login"}
 			</h2>
+
 			<form
-				onSubmit={handleSubmit}
+				onSubmit={handleSubmit(onSubmit)}
 				action=""
 				className="flex flex-col gap-6"
 			>
 				<div className="flex flex-col gap-3">
-					<InputText
-						value={userData.nickname}
-						placeholder="nickname"
-						name="nickname"
-						onChange={handleChange}
-					/>
+					<div className="flex flex-col gap-1">
+						<Controller
+							name="nickname"
+							control={control}
+							rules={{
+								required: {
+									value: true,
+									message: "This field is required",
+								},
+								minLength: {
+									value: 4,
+									message: "Minimal length is 4",
+								},
+							}}
+							render={({ field, fieldState, formState }) => (
+								<>
+									<InputText
+										id={field.name}
+										placeholder={field.name}
+										invalid={fieldState.invalid}
+										{...field}
+									/>
+									{fieldState.error &&
+										fieldState.isTouched && (
+											<small
+												id={field.name}
+												className="text-red-500"
+											>
+												{fieldState.error?.message}
+											</small>
+										)}
+								</>
+							)}
+						></Controller>
+					</div>
 					{!isLogin && (
-						<InputText
-							value={userData.email}
-							placeholder="email"
-							name="email"
-							onChange={handleChange}
-						/>
+						<div className="flex flex-col gap-1">
+							<Controller
+								name="email"
+								control={control}
+								rules={{
+									pattern: {
+										value: RegExp(
+											"[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$"
+										),
+										message:
+											"Please input email in correct format",
+									},
+									required: {
+										value: true,
+										message: "This field is required",
+									},
+									minLength: {
+										value: 4,
+										message: "Minimal length is 4",
+									},
+								}}
+								render={({ field, fieldState }) => (
+									<>
+										<InputText
+											id={field.name}
+											placeholder={field.name}
+											invalid={fieldState.invalid}
+											{...field}
+										/>
+										{fieldState.error &&
+											fieldState.isTouched && (
+												<small
+													id={field.name}
+													className="text-red-500"
+												>
+													{fieldState.error?.message}
+												</small>
+											)}
+									</>
+								)}
+							></Controller>
+						</div>
 					)}
-
-					<Password
-						value={userData.password}
-						placeholder="password"
-						name="password"
-						onChange={handleChange}
-						toggleMask
-						feedback={false}
-						tabIndex={1}
-					/>
+					<div className="flex flex-col gap-1">
+						<Controller
+							name="password"
+							control={control}
+							rules={{
+								required: {
+									value: true,
+									message: "This field is required",
+								},
+								minLength: {
+									value: 4,
+									message: "Minimal length is 4",
+								},
+							}}
+							render={({ field, fieldState }) => (
+								<>
+									<Password
+										id={field.name}
+										placeholder={field.name}
+										invalid={fieldState.invalid}
+										toggleMask
+										feedback={!isLogin}
+										tabIndex={1}
+										{...field}
+									/>
+									{fieldState.error &&
+										fieldState.isTouched && (
+											<small
+												id={field.name}
+												className="text-red-500"
+											>
+												{fieldState.error?.message}
+											</small>
+										)}
+								</>
+							)}
+						></Controller>
+					</div>
 				</div>
 
 				<div className="flex flex-col gap-3 items-center">

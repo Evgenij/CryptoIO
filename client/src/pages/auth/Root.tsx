@@ -17,7 +17,7 @@ export const Root: FC<Props> = () => {
 
 				<span className="opacity-30">/</span>
 				<Link to={AUTH_ROUTE}>
-					<Button label="Login" outlined />
+					<Button label="Login" />
 				</Link>
 			</div>
 		</form>

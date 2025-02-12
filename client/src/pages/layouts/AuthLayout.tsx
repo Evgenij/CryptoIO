@@ -7,7 +7,7 @@ export const AuthLayout: FC = () => {
 	return (
 		<main
 			className={jc(
-				"h-screen flex flex-col space-y-20 items-center justify-center pattern-dots-md text-zinc-900/50"
+				"h-screen flex flex-col space-y-20 items-center justify-center pattern-dots-md text-zinc-900/60"
 			)}
 		>
 			<Logo className="w-[385px]" />

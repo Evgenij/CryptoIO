@@ -1,7 +1,8 @@
 @use "./vars.scss" as vars;
+@use "sass:color";
 
 $effect3D: 3px;
-$amountHover: 5;
+$amountHover: 8;
 $amountActive: 20;
 
 @mixin button() {
@@ -9,19 +10,19 @@ $amountActive: 20;
 		background: vars.$primary;
 		border: none;
 		box-shadow: 0px $effect3D 0px
-			darken($color: vars.$primary, $amount: $amountActive);
+			color.adjust(vars.$primary, $lightness: -1% * $amountActive);
 
 		&:hover {
-			background-color: darken(
-				$color: vars.$primary,
-				$amount: $amountHover
+			background-color: color.adjust(
+				vars.$primary,
+				$lightness: -1% * $amountHover
 			);
 		}
 
 		&:active {
 			transform: translateY($effect3D);
 			box-shadow: 0px 0px 0px
-				darken($color: vars.$primary, $amount: $amountActive);
+				color.adjust(vars.$primary, $lightness: -1% * $amountHover);
 		}
 
 		&-outlined {
@@ -40,16 +41,19 @@ $amountActive: 20;
 			background: white;
 
 			box-shadow: 0px $effect3D 0px
-				darken($color: white, $amount: $amountActive);
+				color.adjust(vars.$primary, $lightness: -1% * $amountActive);
 
 			&:hover {
-				background-color: darken($color: white, $amount: $amountHover);
+				background-color: color.adjust(
+					white,
+					$lightness: -1% * $amountHover
+				);
 			}
 
 			&:active {
 				transform: translateY($effect3D);
 				box-shadow: 0px 0px 0px
-					darken($color: white, $amount: $amountActive);
+					color.adjust(vars.$primary, $lightness: -1% * $amountActive);
 			}
 		}
 	}
@@ -84,6 +88,40 @@ $amountActive: 20;
 			&-input {
 				width: 100%;
 			}
+
+			&-panel {
+				background-color: #2d2d2e;
+				padding: 0.7em 0.6em;
+				font-size: 14px;
+				line-height: 1.3;
+
+				.p-password-meter[data-pc-section="meter"] {
+					height: 4px;
+					margin-bottom: 4px;
+					background-color: #555555;
+
+					.p-password-strength {
+						&.weak {
+							background-color: #fb2c36;
+						}
+						&.medium {
+							background-color: #ffba26;
+						}
+						&.strong {
+							background-color: #2d8a24;
+						}
+					}
+				}
+			}
+		}
+
+		&:focus {
+			&.p-invalid {
+				border: 2px solid #fb2c36;
+			}
+		}
+		&.p-invalid {
+			border: 2px solid #fb2c36;
 		}
 	}
 
