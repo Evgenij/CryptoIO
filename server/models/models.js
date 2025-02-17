@@ -6,6 +6,14 @@ const User = sequelize.define("User", {
 	email: { type: DataTypes.STRING, unique: true },
 	password: { type: DataTypes.STRING },
 	nickname: { type: DataTypes.STRING, unique: true },
+	isActivated: { type: DataTypes.BOOLEAN, defaultValue: false },
+	activationLink: { type: DataTypes.STRING },
+	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
+	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
+});
+
+const Token = sequelize.define("Token", {
+	refreshToken: { type: DataTypes.STRING, unique: true, require },
 	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
 });
@@ -139,6 +147,10 @@ User.hasMany(Order);
 Order.belongsTo(User);
 
 //1:M
+User.hasMany(Token);
+Token.belongsTo(User);
+
+//1:M
 Cart.hasMany(Order);
 Order.belongsTo(Cart);
 
@@ -181,10 +193,15 @@ ComponentStation.belongsTo(Component);
 
 //1:M
 Characteristic.hasMany(CharactComponent);
-CharactComponent.belongsTo(Characteristic);
+CharactComponent.belongsTo(Characteristic, {
+	onDelete: "CASCADE",
+	onUpdate: "CASCADE",
+	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
+	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
+});
 
 //1:M
 Component.hasMany(CharactComponent);
 CharactComponent.belongsTo(Component);
 
-module.exports = { User, Cart, Order, Component, Manufacturer, Type };
+module.exports = { User, Cart, Order, Component, Manufacturer, Type, Token };
