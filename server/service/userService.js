@@ -2,10 +2,10 @@ const { User } = require("../models/models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
-const mailService = require("./MailService");
-const { generateTokens, saveToken } = require("./TokenService");
 const UserDTO = require("../DTOs/userDTO");
 const ApiError = require("../error/ApiError");
+const tokenService = require("./tokenService");
+const mailService = require("./mailService");
 
 class UserService {
 	async registration(nickname, email, password) {
@@ -35,9 +35,9 @@ class UserService {
 		);
 
 		const userDTO = new UserDTO(user); // id, nickname, email, isActivated
-		const tokens = await generateTokens({ ...userDTO });
+		const tokens = await tokenService.generateTokens({ ...userDTO });
 
-		await saveToken(userDTO.id, tokens.refreshToken);
+		await tokenService.saveToken(userDTO.id, tokens.refreshToken);
 
 		return {
 			tokens,
@@ -71,14 +71,53 @@ class UserService {
 		}
 
 		const userDTO = new UserDTO(user);
-		const tokens = await generateTokens({ ...userDTO });
+		const tokens = await tokenService.generateTokens({ ...userDTO });
 
-		await saveToken(userDTO.id, tokens.refreshToken);
+		await tokenService.saveToken(userDTO.id, tokens.refreshToken);
 
 		return {
 			tokens,
 			user,
 		};
+	}
+
+	async logout(refreshToken) {
+		try {
+			const token = await tokenService.removeToken(refreshToken);
+
+			return token;
+		} catch (error) {
+			throw ApiError.badRequest(error.message);
+		}
+	}
+
+	async refresh(refreshToken) {
+		if (!refreshToken) {
+			throw ApiError.forbidden("No refresh token");
+		}
+
+		const userData = await tokenService.validateRefreshToken(refreshToken);
+		const tokenFromDB = await tokenService.findToken(refreshToken);
+
+		if (!userData || !tokenFromDB) {
+			throw ApiError.forbidden("Tokens are not valid ");
+		}
+
+		const user = await User.findOne({ where: { id: userData.id } });
+		const userDTO = new UserDTO(user); // id, nickname, email, isActivated
+		const tokens = await tokenService.generateTokens({ ...userDTO });
+
+		await tokenService.saveToken(userDTO.id, tokens.refreshToken);
+
+		return {
+			tokens,
+			user,
+		};
+	}
+
+	async getAllUsers() {
+		const users = await User.findAll();
+		return users;
 	}
 }
 

@@ -2,8 +2,8 @@ const { responseStatuses } = require("../consts");
 const ApiError = require("../error/ApiError");
 const sendResponse = require("../helpers/sendResponse");
 const { User } = require("../models/models");
-const userService = require("../service/UserService");
 const { validationResult } = require("express-validator");
+const userService = require("../service/userService");
 
 class UserController {
 	async get(req, res, next) {
@@ -20,8 +20,8 @@ class UserController {
 				} else {
 					next(ApiError.badRequest("User don't found"));
 				}
-			} catch (e) {
-				next(e);
+			} catch (error) {
+				next(error);
 			}
 		}
 	}
@@ -56,8 +56,8 @@ class UserController {
 
 				return res.status(responseStatuses.OK).json({ ...data });
 			}
-		} catch (e) {
-			next(e);
+		} catch (error) {
+			next(error);
 		}
 	}
 
@@ -70,13 +70,31 @@ class UserController {
 				httpOnly: true,
 			});
 			return res.status(responseStatuses.OK).json(data);
-		} catch (e) {
-			next(e);
+		} catch (error) {
+			next(error);
 		}
 	}
 	async logout(req, res, next) {
 		try {
-		} catch (e) {}
+			const { refreshToken } = req.cookies;
+			console.log(refreshToken);
+
+			if (
+				refreshToken !== undefined &&
+				refreshToken !== null &&
+				refreshToken !== ""
+			) {
+				const token = await userService.logout(refreshToken);
+				res.clearCookie("refreshToken");
+				return res.json(token);
+			}
+
+			return res.json({
+				message: "RefreshToken don't exist",
+			});
+		} catch (error) {
+			next(error);
+		}
 	}
 	async activateToken(req, res, next) {
 		try {
@@ -84,13 +102,30 @@ class UserController {
 			await userService.activate(activationLink);
 
 			return res.redirect(process.env.CLIENT_URL);
-		} catch (e) {
-			next(e);
+		} catch (error) {
+			next(error);
 		}
 	}
 	async refreshToken(req, res, next) {
 		try {
-		} catch (e) {}
+			const { refreshToken } = req.cookies;
+			const data = await userService.refresh(refreshToken);
+			res.cookie("refreshToken", data.tokens.refreshToken, {
+				maxAge: 30 * 24 * 60 * 60 * 1000,
+				httpOnly: true,
+			});
+			return res.json(data);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async getAllUsers(req, res, next) {
+		try {
+			return res.json(await userService.getAllUsers());
+		} catch (error) {
+			next(error);
+		}
 	}
 }
 
