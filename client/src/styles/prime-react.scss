@@ -1,0 +1,138 @@
+@use "./vars.scss" as vars;
+@use "sass:color";
+
+$effect3D: 3px;
+$amountHover: 8;
+$amountActive: 20;
+
+@mixin button() {
+	&-button {
+		background: vars.$primary;
+		border: none;
+		box-shadow: 0px $effect3D 0px
+			color.adjust(vars.$primary, $lightness: -1% * $amountActive);
+
+		&:hover {
+			background-color: color.adjust(
+				vars.$primary,
+				$lightness: -1% * $amountHover
+			);
+		}
+
+		&:active {
+			transform: translateY($effect3D);
+			box-shadow: 0px 0px 0px
+				color.adjust(vars.$primary, $lightness: -1% * $amountHover);
+		}
+
+		&-outlined {
+			color: white;
+			background-color: rgba($color: white, $alpha: 0.04);
+			border: 3px solid rgba($color: white, $alpha: 0.03);
+			box-shadow: none;
+
+			&:hover {
+				background-color: rgba($color: white, $alpha: 0.06);
+			}
+		}
+
+		&.white {
+			$amountActive: 50;
+			background: white;
+
+			box-shadow: 0px $effect3D 0px
+				color.adjust(vars.$primary, $lightness: -1% * $amountActive);
+
+			&:hover {
+				background-color: color.adjust(
+					white,
+					$lightness: -1% * $amountHover
+				);
+			}
+
+			&:active {
+				transform: translateY($effect3D);
+				box-shadow: 0px 0px 0px
+					color.adjust(vars.$primary, $lightness: -1% * $amountActive);
+			}
+		}
+	}
+}
+
+@mixin input() {
+	&-inputtext {
+		background-color: rgba($color: white, $alpha: 0.15);
+		border: 2px solid transparent;
+		color: white;
+
+		&:hover {
+			background-color: rgba($color: white, $alpha: 0.2);
+		}
+
+		&:focus {
+			border-color: rgba($color: white, $alpha: 0.5);
+		}
+	}
+}
+
+.p {
+	&-component {
+		box-sizing: border-box;
+		border-radius: 0px;
+		border: none;
+		padding: 0.4rem 0.8rem;
+
+		&.p-password {
+			padding: 0;
+
+			&-input {
+				width: 100%;
+			}
+
+			&-panel {
+				background-color: #2d2d2e;
+				padding: 0.7em 0.6em;
+				font-size: 14px;
+				line-height: 1.3;
+
+				.p-password-meter[data-pc-section="meter"] {
+					height: 4px;
+					margin-bottom: 4px;
+					background-color: #555555;
+
+					.p-password-strength {
+						&.weak {
+							background-color: #fb2c36;
+						}
+						&.medium {
+							background-color: #ffba26;
+						}
+						&.strong {
+							background-color: #2d8a24;
+						}
+					}
+				}
+			}
+		}
+
+		&:focus {
+			&.p-invalid {
+				border: 2px solid #fb2c36;
+			}
+		}
+		&.p-invalid {
+			border: 2px solid #fb2c36;
+		}
+	}
+
+	&-icon-field {
+		width: 100%;
+
+		.p-input-icon {
+			top: 39%;
+		}
+	}
+
+	@include button;
+	@include input;
+}

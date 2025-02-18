@@ -14,21 +14,19 @@ import { Password } from "primereact/password";
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Message } from "primereact/message";
+import { IUserData } from "../../interfaces/IUserData";
+import AuthService from "../../services/AuthService";
 
 interface Props {
 	className?: string;
-}
-
-interface IUserData {
-	nickname: string;
-	password: string;
-	email: string;
 }
 
 const emptyUserData: IUserData = {
 	nickname: "",
 	password: "",
 	email: "",
+	id: null,
+	isActivated: false,
 };
 
 export const AuthPage: FC<Props> = ({ className }) => {
@@ -44,9 +42,22 @@ export const AuthPage: FC<Props> = ({ className }) => {
 		defaultValues: emptyUserData,
 	});
 
-	const onSubmit: SubmitHandler<IUserData> = (data) => {
+	const onSubmit: SubmitHandler<IUserData> = async (data) => {
 		console.log(data);
-		reset();
+		try {
+			if (isLogin) {
+				const response = await AuthService.login(
+					data.nickname,
+					data.password
+				);
+				console.log(response);
+
+				localStorage.setItem("token", response.data.tokens.accessToken);
+			}
+			reset();
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	console.log("errors", errors);

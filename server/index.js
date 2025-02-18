@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const sequelize = require("./DB");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const router = require("./routes/router");
 const handlingError = require("./middleware/ErrorHandlingMiddleware");
 const fileUpload = require("express-fileupload");
@@ -10,6 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 7000;
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(fileUpload({}));
 
 app.use("/api", router);

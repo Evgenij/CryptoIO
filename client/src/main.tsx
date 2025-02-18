@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 
 //styles and icons
 import "./tailwindStyles.css";
-import "./assets/styles/index.scss";
+import "./styles/index.scss";
 import "primeicons/primeicons.css";
 import "primereact/resources/themes/viva-dark/theme.css";
 
