@@ -2,6 +2,7 @@ const { responseStatuses } = require("../consts");
 const ApiError = require("../error/ApiError");
 const sendResponse = require("../helpers/sendResponse");
 const { User } = require("../models/models");
+const { validationResult } = require("express-validator");
 const userService = require("../service/userService");
 
 class UserController {
@@ -9,23 +10,38 @@ class UserController {
 		const { id } = req.body;
 
 		if (!id) {
-			return next(ApiError.badRequest("Id don't set"));
+			next(ApiError.badRequest("Id don't set"));
 		} else {
 			try {
 				const user = await User.findOne({ where: { id } });
+
+				if (user) {
+					sendResponse(res, { user });
+				} else {
+					next(ApiError.badRequest("User don't found"));
+				}
 			} catch (error) {
-				return ApiError.badRequest(error.message);
+				next(error);
 			}
-			sendResponse(responseStatuses.OK, res, { id });
 		}
 	}
 
 	async registration(req, res, next) {
 		try {
 			const { email, password, nickname } = req.body;
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.badRequest(
+						"Errors from validation",
+						errors.array()
+					)
+				);
+			}
 
 			if (!email || !password || !nickname) {
-				return next(ApiError.badRequest("Incorrect data"));
+				next(ApiError.badRequest("Incorrect data"));
 			} else {
 				const data = await userService.registration(
 					nickname,
@@ -33,33 +49,83 @@ class UserController {
 					password
 				);
 
-				res.cookie("refreshToken", data.refreshToken, {
+				res.cookie("refreshToken", data.tokens.refreshToken, {
 					maxAge: 30 * 24 * 60 * 60 * 1000,
 					httpOnly: true,
 				});
 
-				sendResponse(responseStatuses.OK, res, { data });
+				return res.status(responseStatuses.OK).json({ ...data });
 			}
-		} catch (e) {
-			next(ApiError.badRequest(e.message));
+		} catch (error) {
+			next(error);
 		}
 	}
 
 	async login(req, res, next) {
 		try {
-		} catch (e) {}
+			const { nickname, password } = req.body;
+			const data = await userService.login(nickname, password);
+			res.cookie("refreshToken", data.tokens.refreshToken, {
+				maxAge: 30 * 24 * 60 * 60 * 1000,
+				httpOnly: true,
+			});
+			return res.status(responseStatuses.OK).json(data);
+		} catch (error) {
+			next(error);
+		}
 	}
 	async logout(req, res, next) {
 		try {
-		} catch (e) {}
+			const { refreshToken } = req.cookies;
+			console.log(refreshToken);
+
+			if (
+				refreshToken !== undefined &&
+				refreshToken !== null &&
+				refreshToken !== ""
+			) {
+				const token = await userService.logout(refreshToken);
+				res.clearCookie("refreshToken");
+				return res.json(token);
+			}
+
+			return res.json({
+				message: "RefreshToken don't exist",
+			});
+		} catch (error) {
+			next(error);
+		}
 	}
 	async activateToken(req, res, next) {
 		try {
-		} catch (e) {}
+			const activationLink = req.params.link;
+			await userService.activate(activationLink);
+
+			return res.redirect(process.env.CLIENT_URL);
+		} catch (error) {
+			next(error);
+		}
 	}
 	async refreshToken(req, res, next) {
 		try {
-		} catch (e) {}
+			const { refreshToken } = req.cookies;
+			const data = await userService.refresh(refreshToken);
+			res.cookie("refreshToken", data.tokens.refreshToken, {
+				maxAge: 30 * 24 * 60 * 60 * 1000,
+				httpOnly: true,
+			});
+			return res.json(data);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async getAllUsers(req, res, next) {
+		try {
+			return res.json(await userService.getAllUsers());
+		} catch (error) {
+			next(error);
+		}
 	}
 }
 

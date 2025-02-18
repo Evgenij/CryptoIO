@@ -13,7 +13,7 @@ const User = sequelize.define("User", {
 });
 
 const Token = sequelize.define("Token", {
-	refreshToken: { type: DataTypes.STRING, unique: true, require },
+	refreshToken: { type: DataTypes.TEXT, unique: true },
 	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
 });
