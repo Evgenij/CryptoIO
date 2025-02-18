@@ -1,6 +1,7 @@
 const Router = require("express");
 const userControllers = require("../controllers/userControllers");
 const { body } = require("express-validator");
+const AuthMiddleware = require("../middleware/AuthMiddleware");
 
 const router = new Router();
 
@@ -17,6 +18,9 @@ router.post(
 	userControllers.registration
 );
 router.post("/login", userControllers.login);
+router.post("/logout", userControllers.logout);
 router.get("/activate/:link", userControllers.activateToken);
+router.get("/refresh", userControllers.refreshToken);
+router.get("/get", AuthMiddleware, userControllers.getAllUsers); // TODO: For testing middleware of authorization
 
 module.exports = router;
