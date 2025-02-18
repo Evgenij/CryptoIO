@@ -1,24 +1,96 @@
-const uuid = require("uuid");
-const path = require("path");
+const { responseStatuses } = require("../consts");
 const ApiError = require("../error/ApiError");
+const sendResponse = require("../helpers/sendResponse");
 const { User } = require("../models/models");
+const userService = require("../service/UserService");
+const { validationResult } = require("express-validator");
 
 class UserController {
 	async get(req, res, next) {
-		res.status(200).json({ message: "!!!!!!" });
+		const { id } = req.body;
+
+		if (!id) {
+			next(ApiError.badRequest("Id don't set"));
+		} else {
+			try {
+				const user = await User.findOne({ where: { id } });
+
+				if (user) {
+					sendResponse(res, { user });
+				} else {
+					next(ApiError.badRequest("User don't found"));
+				}
+			} catch (e) {
+				next(e);
+			}
+		}
 	}
-	async create(req, res, next) {
-		const { img } = req.files;
-		let filename = uuid.v4() + ".png";
-		img.mv(path.resolve(__dirname, "..", "static", filename));
 
-		const user = await User.create({});
+	async registration(req, res, next) {
+		try {
+			const { email, password, nickname } = req.body;
+			const errors = validationResult(req);
 
-		// if (!id) {
-		// 	return next(ApiError.badRequest("ID don't set"));
-		// }
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.badRequest(
+						"Errors from validation",
+						errors.array()
+					)
+				);
+			}
 
-		// res.status(200).json({ id });
+			if (!email || !password || !nickname) {
+				next(ApiError.badRequest("Incorrect data"));
+			} else {
+				const data = await userService.registration(
+					nickname,
+					email,
+					password
+				);
+
+				res.cookie("refreshToken", data.tokens.refreshToken, {
+					maxAge: 30 * 24 * 60 * 60 * 1000,
+					httpOnly: true,
+				});
+
+				return res.status(responseStatuses.OK).json({ ...data });
+			}
+		} catch (e) {
+			next(e);
+		}
+	}
+
+	async login(req, res, next) {
+		try {
+			const { nickname, password } = req.body;
+			const data = await userService.login(nickname, password);
+			res.cookie("refreshToken", data.tokens.refreshToken, {
+				maxAge: 30 * 24 * 60 * 60 * 1000,
+				httpOnly: true,
+			});
+			return res.status(responseStatuses.OK).json(data);
+		} catch (e) {
+			next(e);
+		}
+	}
+	async logout(req, res, next) {
+		try {
+		} catch (e) {}
+	}
+	async activateToken(req, res, next) {
+		try {
+			const activationLink = req.params.link;
+			await userService.activate(activationLink);
+
+			return res.redirect(process.env.CLIENT_URL);
+		} catch (e) {
+			next(e);
+		}
+	}
+	async refreshToken(req, res, next) {
+		try {
+		} catch (e) {}
 	}
 }
 
