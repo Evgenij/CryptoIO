@@ -75,6 +75,24 @@ $amountActive: 20;
 	}
 }
 
+@mixin message() {
+	&-inline-message {
+		// &-text {
+		// 	min-width: max-content;
+		// }
+		&-error {
+			min-width: max-content;
+			padding: 0.6em 0.8em;
+			background-color: #ff00006b;
+			color: white;
+
+			svg path {
+				fill: white;
+			}
+		}
+	}
+}
+
 .p {
 	&-component {
 		box-sizing: border-box;
@@ -135,4 +153,5 @@ $amountActive: 20;
 
 	@include button;
 	@include input;
+	@include message;
 }
