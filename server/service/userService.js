@@ -61,7 +61,9 @@ class UserService {
 		const user = await User.findOne({ where: { nickname } });
 
 		if (!user) {
-			throw ApiError.badRequest("User don't found");
+			throw ApiError.badRequest(
+				`User with nickname "${nickname}" don't found`
+			);
 		}
 
 		const isPassEquals = await bcrypt.compare(password, user.password);

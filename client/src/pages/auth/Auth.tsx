@@ -1,4 +1,4 @@
-import { ChangeEvent, ChangeEventHandler, FC, useState } from "react";
+import { FC, useState } from "react";
 import { jc } from "../../utils/joinClasses";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -6,15 +6,18 @@ import { Password } from "primereact/password";
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Message } from "primereact/message";
-import { IUserData } from "../../interfaces/IUserData";
-import AuthService from "../../services/AuthService";
-import axios, { AxiosError } from "axios";
+import { IUser } from "../../api/models/IUser";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { AppDispatch } from "../../store";
+import { IUserSliceState } from "../../store/slices/userSlice";
+import { login } from "../../store/slices/userSlice";
 
 interface Props {
 	className?: string;
 }
 
-const emptyUserData: IUserData = {
+const emptyUserData: IUser = {
 	nickname: "",
 	password: "",
 	email: "",
@@ -24,41 +27,48 @@ const emptyUserData: IUserData = {
 
 export const AuthPage: FC<Props> = ({ className }) => {
 	const [isLogin, setIsLogin] = useState(true);
-	const [userData, setUserData] = useState<IUserData>(emptyUserData);
 	const [errors, setErrors] = useState<String[]>([]);
+
+	const dispatch = useDispatch<AppDispatch>();
+	const user = useSelector((state: any) => state.user.userData);
+	const loading = useSelector((state: any) => state.user.loading);
+	const error = useSelector((state: any) => state.user.error);
 
 	const {
 		handleSubmit,
 		reset,
 		control,
 		//formState: { errors },
-	} = useForm<IUserData>({
+	} = useForm<IUser>({
 		defaultValues: emptyUserData,
 	});
 
-	const onSubmit: SubmitHandler<IUserData> = async (data) => {
+	const onSubmit: SubmitHandler<IUser> = async (data) => {
 		setErrors([]);
 		try {
 			if (isLogin) {
-				const response = await AuthService.login(
-					data.nickname,
-					data.password
+				// const response = await AuthService.login(
+				// 	data.nickname,
+				// 	data.password
+				// );
+				// console.log(response);
+				// localStorage.setItem("token", response.data.tokens.accessToken);
+
+				dispatch(
+					login({ nickname: data.nickname, password: data.password })
 				);
-				console.log(response);
 
-				localStorage.setItem("token", response.data.tokens.accessToken);
+				// reset();
 			}
-			reset();
 		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				// Access to config, request, and response
-				console.log(error);
-
-				setErrors((prev) => [...prev, error.response?.data.message]);
-			} else {
-				// Just a stock error
-				console.log(error);
-			}
+			// console.log(typeof error);
+			// if (axios.isAxiosError(error)) {
+			// 	// Access to config, request, and response
+			// 	setErrors((prev) => [...prev, error.response?.data.message]);
+			// } else {
+			// 	// Just a stock error
+			// 	console.log(error);
+			// }
 		}
 	};
 
@@ -91,7 +101,7 @@ export const AuthPage: FC<Props> = ({ className }) => {
 									message: "Minimal length is 4",
 								},
 							}}
-							render={({ field, fieldState, formState }) => (
+							render={({ field, fieldState }) => (
 								<>
 									<InputText
 										id={field.name}
@@ -198,13 +208,12 @@ export const AuthPage: FC<Props> = ({ className }) => {
 						className="white w-full"
 						label={!isLogin ? "Sign up" : "Login"}
 					/>
+					{loading && <p>Loading...</p>}
 					<Link to={"/"} className="text-zinc-500">
 						back
 					</Link>
 				</div>
-				{errors.length > 0 && (
-					<Message text={errors[0]} severity="error"></Message>
-				)}
+				{error && <Message text={error} severity="error"></Message>}
 			</form>
 		</div>
 	);
