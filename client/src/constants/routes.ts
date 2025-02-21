@@ -1,10 +1,10 @@
 export const ERROR_ROUTE = "*";
-export const DASHBOARD_ROUTE = "/dashboard";
 
 export const ROOT_ROUTE = "/";
-export const AUTH_ROUTE = "auth";
+export const AUTH_ROUTE = "/auth";
+export const DASHBOARD_ROUTE = "/dashboard";
 
-export const MENU_ROUTE = "/menu";
+export const MENU_ROUTE = "menu";
 export const MINING_AREA_ROUTE = `${DASHBOARD_ROUTE}/mining-area`;
 export const SHOP_ROUTE = `${DASHBOARD_ROUTE}/shop`;
 export const BASKET_ROUTE = `${SHOP_ROUTE}/basket`;

@@ -77,18 +77,17 @@ $amountActive: 20;
 
 @mixin message() {
 	&-inline-message {
-		// &-text {
-		// 	min-width: max-content;
-		// }
-		&-error {
-			min-width: max-content;
-			padding: 0.6em 0.8em;
-			background-color: #ff00006b;
-			color: white;
+		padding: 0.6em 0.8em;
+		color: white;
 
-			svg path {
-				fill: white;
-			}
+		svg path {
+			fill: white;
+		}
+		&-error {
+			background-color: #710b0b;
+		}
+		&-success {
+			background-color: #366809;
 		}
 	}
 }

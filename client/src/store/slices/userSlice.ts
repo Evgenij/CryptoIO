@@ -1,11 +1,11 @@
-import {
-	createSlice,
-	buildCreateSlice,
-	asyncThunkCreator,
-} from "@reduxjs/toolkit";
+import { buildCreateSlice, asyncThunkCreator } from "@reduxjs/toolkit";
 import { IUser } from "../../api/models/IUser";
 import AuthService from "../../services/AuthService";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import router from "../../router";
+import { DASHBOARD_ROUTE } from "../../constants/routes";
+import { IAuthResponse } from "../../api/models/response/IAuthResponse";
+import { API_URL } from "../../api";
 
 export interface IUserSliceState {
 	userData: IUser | null | undefined;
@@ -48,7 +48,49 @@ const userSlice = createAppSlice({
 					if (axios.isAxiosError(error)) {
 						return Promise.reject(error.response?.data.message);
 					} else {
-						// Just a stock error
+						console.log(error);
+					}
+				}
+			},
+			{
+				pending: (state) => {
+					state.loading = true;
+					state.error = null;
+				},
+				rejected: (state, action) => {
+					state.loading = false;
+					state.error = action.error.message;
+				},
+				fulfilled: (state, action) => {
+					state.isAuth = true;
+					state.loading = false;
+					state.userData = action.payload;
+
+					router.navigate(DASHBOARD_ROUTE);
+				},
+			}
+		),
+		registration: create.asyncThunk(
+			async (user: {
+				nickname: string;
+				password: string;
+				email: string;
+			}) => {
+				try {
+					const response = await AuthService.registration(
+						user.nickname,
+						user.email,
+						user.password
+					);
+					localStorage.setItem(
+						"token",
+						response.data.tokens.accessToken
+					);
+					return response.data.user;
+				} catch (error) {
+					if (axios.isAxiosError(error)) {
+						return Promise.reject(error.response?.data.message);
+					} else {
 						console.log(error);
 					}
 				}
@@ -64,11 +106,77 @@ const userSlice = createAppSlice({
 				},
 				fulfilled: (state, action) => {
 					state.loading = false;
+					state.isAuth = true;
+					state.userData = action.payload;
+				},
+			}
+		),
+		logout: create.asyncThunk(
+			async () => {
+				try {
+					await AuthService.logout();
+					localStorage.removeItem("token");
+				} catch (error) {
+					if (axios.isAxiosError(error)) {
+						return Promise.reject(error.response?.data.message);
+					} else {
+						console.log(error);
+					}
+				}
+			},
+			{
+				pending: (state) => {
+					state.loading = true;
+					state.error = null;
+				},
+				rejected: (state, action) => {
+					state.loading = false;
+					state.error = action.error.message;
+				},
+				fulfilled: (state, action) => {
+					state.isAuth = false;
+					state.loading = false;
+					state.userData = {} as IUser;
+				},
+			}
+		),
+		checkAuth: create.asyncThunk(
+			async () => {
+				try {
+					const response = await axios.get<IAuthResponse>(
+						`${API_URL}/user/refresh`,
+						{ withCredentials: true }
+					);
+					localStorage.setItem(
+						"token",
+						response.data.tokens.accessToken
+					);
+					return response.data.user;
+				} catch (error) {
+					if (axios.isAxiosError(error)) {
+						return Promise.reject(error.response?.data.message);
+					} else {
+						console.log(error);
+					}
+				}
+			},
+			{
+				pending: (state) => {
+					state.loading = true;
+					state.error = null;
+				},
+				rejected: (state, action) => {
+					state.loading = false;
+					state.error = action.error.message;
+				},
+				fulfilled: (state, action) => {
+					state.isAuth = true;
+					state.loading = false;
 					state.userData = action.payload;
 				},
 			}
 		),
 	}),
 });
-export const { login } = userSlice.actions;
+export const { login, logout, registration } = userSlice.actions;
 export default userSlice.reducer;
