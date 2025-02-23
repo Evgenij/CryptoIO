@@ -1,6 +1,6 @@
-import { IUserData } from "../../../interfaces/IUserData";
+import { IUser } from "../IUser";
 
 export interface IAuthResponse {
 	tokens: { accessToken: string; refreshToken: string };
-	user: IUserData;
+	user: IUser;
 }

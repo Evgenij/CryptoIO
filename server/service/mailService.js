@@ -15,23 +15,22 @@ class MailService {
 	}
 
 	async sendActivationMail(to, link) {
-		if (process.env.MAILER_IS_ACTIVE == true)
-			try {
-				await this.transporter.sendMail({
-					from: process.env.SMTP_USER,
-					to,
-					subject: "Activation account for " + process.env.API_URL,
-					text: "",
-					html: `
-					<div>
-						<h1>For activation account, please click link</h1>
-						<a href="${link}">${link}</a>
-					</div>
-				`,
-				});
-			} catch (e) {
-				throw ApiError.badRequest("Message don't sent");
-			}
+		try {
+			await this.transporter.sendMail({
+				from: process.env.SMTP_USER,
+				to,
+				subject: "Activation account for " + process.env.API_URL,
+				text: "",
+				html: `
+				<div>
+					<h1>For activation account, please click link</h1>
+					<a href="${link}">${link}</a>
+				</div>
+			`,
+			});
+		} catch (e) {
+			throw ApiError.badRequest("Message don't sent");
+		}
 	}
 }
 
