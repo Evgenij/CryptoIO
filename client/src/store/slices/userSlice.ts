@@ -66,7 +66,7 @@ const userSlice = createAppSlice({
 					state.loading = false;
 					state.userData = action.payload;
 
-					router.navigate(DASHBOARD_ROUTE);
+					router.navigate(DASHBOARD_ROUTE).then();
 				},
 			}
 		),
@@ -133,7 +133,7 @@ const userSlice = createAppSlice({
 					state.loading = false;
 					state.error = action.error.message;
 				},
-				fulfilled: (state, action) => {
+				fulfilled: (state) => {
 					state.isAuth = false;
 					state.loading = false;
 					state.userData = {} as IUser;
@@ -143,6 +143,8 @@ const userSlice = createAppSlice({
 		checkAuth: create.asyncThunk(
 			async () => {
 				try {
+					console.log("Check Auth");
+
 					const response = await axios.get<IAuthResponse>(
 						`${API_URL}/user/refresh`,
 						{ withCredentials: true }
@@ -178,5 +180,5 @@ const userSlice = createAppSlice({
 		),
 	}),
 });
-export const { login, logout, registration } = userSlice.actions;
+export const { login, logout, registration, checkAuth } = userSlice.actions;
 export default userSlice.reducer;

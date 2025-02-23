@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import {
-	AUTH_ROUTE,
 	DASHBOARD_ROUTE,
+	LOGIN_ROUTE,
+	REGISTRATION_ROUTE,
 	ROOT_ROUTE,
 } from "../constants/routes.ts";
 import { AuthLayout } from "../pages/layouts/AuthLayout.tsx";
@@ -21,7 +22,11 @@ const router = createBrowserRouter([
 				Component: Root,
 			},
 			{
-				path: AUTH_ROUTE,
+				path: LOGIN_ROUTE,
+				Component: AuthPage,
+			},
+			{
+				path: REGISTRATION_ROUTE,
 				Component: AuthPage,
 			},
 		],

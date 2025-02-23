@@ -1,9 +1,20 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Logo } from "../../components/Logo";
 import { Outlet } from "react-router-dom";
 import { jc } from "../../utils/joinClasses";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store";
+import { checkAuth } from "../../store/slices/userSlice";
 
 export const AuthLayout: FC = () => {
+	const dispatch = useDispatch<AppDispatch>();
+
+	useEffect(() => {
+		if (localStorage.getItem("token")) {
+			dispatch(checkAuth());
+		}
+	}, []);
+
 	return (
 		<main
 			className={jc(

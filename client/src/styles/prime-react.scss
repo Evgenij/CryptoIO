@@ -9,7 +9,7 @@ $amountActive: 20;
 	&-button {
 		background: vars.$primary;
 		border: none;
-		box-shadow: 0px $effect3D 0px
+		box-shadow: 0 $effect3D 0
 			color.adjust(vars.$primary, $lightness: -1% * $amountActive);
 
 		&:hover {
@@ -21,18 +21,18 @@ $amountActive: 20;
 
 		&:active {
 			transform: translateY($effect3D);
-			box-shadow: 0px 0px 0px
+			box-shadow: 0 0 0
 				color.adjust(vars.$primary, $lightness: -1% * $amountHover);
 		}
 
 		&-outlined {
 			color: white;
 			background-color: rgba($color: white, $alpha: 0.04);
-			border: 3px solid rgba($color: white, $alpha: 0.03);
 			box-shadow: none;
 
 			&:hover {
-				background-color: rgba($color: white, $alpha: 0.06);
+				background-color: white;
+				color: vars.$black;
 			}
 		}
 
@@ -40,7 +40,7 @@ $amountActive: 20;
 			$amountActive: 50;
 			background: white;
 
-			box-shadow: 0px $effect3D 0px
+			box-shadow: 0 $effect3D 0
 				color.adjust(vars.$primary, $lightness: -1% * $amountActive);
 
 			&:hover {
@@ -52,7 +52,7 @@ $amountActive: 20;
 
 			&:active {
 				transform: translateY($effect3D);
-				box-shadow: 0px 0px 0px
+				box-shadow: 0 0 0
 					color.adjust(vars.$primary, $lightness: -1% * $amountActive);
 			}
 		}
@@ -95,9 +95,9 @@ $amountActive: 20;
 .p {
 	&-component {
 		box-sizing: border-box;
-		border-radius: 0px;
+		border-radius: 0;
 		border: none;
-		padding: 0.4rem 0.8rem;
+		padding: 0.6rem 0.8rem;
 
 		&.p-password {
 			padding: 0;

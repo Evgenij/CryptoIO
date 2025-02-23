@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import React, { FC } from "react";
 import { jc } from "../../utils/joinClasses";
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -7,10 +7,9 @@ import { IUser } from "../../api/models/IUser";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { login, logout, registration } from "../../store/slices/userSlice";
-
 import { Button, InputText, Password } from "../../components/ui/index";
 import router from "../../router";
-import { DASHBOARD_ROUTE } from "../../constants/routes";
+import { LOGIN_ROUTE } from "../../constants/routes";
 
 interface Props {
 	className?: string;
@@ -25,7 +24,8 @@ const emptyUserData: IUser = {
 };
 
 export const AuthPage: FC<Props> = ({ className }) => {
-	const [isLogin, setIsLogin] = useState(true);
+	const isLogin =
+		router.state.location.pathname === LOGIN_ROUTE;
 
 	const dispatch = useDispatch<AppDispatch>();
 	const loading = useSelector((state: any) => state.user.loading);
@@ -77,16 +77,17 @@ export const AuthPage: FC<Props> = ({ className }) => {
 						</span>{" "}
 						has been sent to your e-mail address
 					</h2>
-					<p className="opacity-30 underline">
+					<h3 className="text-xl font-medium text-center">
+						{" "}
+						Please check your email
+					</h3>
+					<p className="opacity-30 underline text-sm">
 						I didn't get the message
 					</p>
 				</div>
 			) : (
 				<div className={jc(className, "flex flex-col gap-8 ")}>
-					<h2
-						className="text-2xl font-medium text-center"
-						onClick={() => setIsLogin(!isLogin)}
-					>
+					<h2 className="text-2xl font-medium text-center">
 						{!isLogin ? "Sign up" : "Login"}
 					</h2>
 					<form
