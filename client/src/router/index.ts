@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import {
 	DASHBOARD_ROUTE,
 	LOGIN_ROUTE,
+	MENU_ROUTE,
 	REGISTRATION_ROUTE,
 	ROOT_ROUTE,
 } from "../constants/routes.ts";
@@ -10,6 +11,7 @@ import { Root } from "../pages/auth/Root.tsx";
 import { AuthPage } from "../pages/auth/Auth.tsx";
 import { DashboardLayout } from "../pages/layouts/DashboardLayout.tsx";
 import { Dashboard } from "../pages/dashboard/Dashboard.tsx";
+import { Menu } from "../pages/Menu.tsx";
 
 const router = createBrowserRouter([
 	//public routes
@@ -32,6 +34,11 @@ const router = createBrowserRouter([
 		],
 	},
 	//protected routes
+	{
+		path: MENU_ROUTE,
+		Component: Menu,
+	},
+
 	{
 		path: DASHBOARD_ROUTE,
 		Component: DashboardLayout,

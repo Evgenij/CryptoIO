@@ -1,4 +1,5 @@
-const { User,  Cart} = require("../models/models");
+// const { User,  Cart} = require("../models/models");
+
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
@@ -6,6 +7,7 @@ const UserDTO = require("../DTOs/userDTO");
 const ApiError = require("../error/ApiError");
 const tokenService = require("./tokenService");
 const mailService = require("./mailService");
+const User = require("../db/models/user");
 
 class UserService {
 	async registration(nickname, email, password) {
@@ -26,10 +28,10 @@ class UserService {
 			email,
 			password: hashPassword,
 			nickname,
-			activationLink
-		})
+			activationLink,
+		});
 
-		await Cart.create({ UserId: user.id });
+		//await Cart.create({ UserId: user.id });
 
 		await mailService.sendActivationMail(
 			email,
