@@ -1,9 +1,10 @@
 const { responseStatuses } = require("../consts");
 const ApiError = require("../error/ApiError");
 const sendResponse = require("../helpers/sendResponse");
-const { User } = require("../models/models");
+// const { User } = require("../models/models");
 const { validationResult } = require("express-validator");
 const userService = require("../service/userService");
+const User = require("../db/models/user");
 
 class UserController {
 	async get(req, res, next) {
