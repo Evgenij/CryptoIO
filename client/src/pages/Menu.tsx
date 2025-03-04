@@ -17,9 +17,12 @@ export const Menu: FC = () => {
 	useEffect(() => {}, []);
 
 	return (
-		<main className="h-screen flex flex-col items-center justify-center">
-			<Logo className="w-[385px]" />
-			<Button label="Submit" className="white" />
+		<main
+			className={jc(
+				"h-screen flex flex-col space-y-20 items-center justify-center pattern-dots-md text-zinc-900/60"
+			)}
+		>
+			<Logo />
 		</main>
 	);
 };

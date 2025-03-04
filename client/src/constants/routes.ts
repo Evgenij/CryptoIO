@@ -5,7 +5,7 @@ export const LOGIN_ROUTE = "/login";
 export const REGISTRATION_ROUTE = "/registration";
 export const DASHBOARD_ROUTE = "/dashboard";
 
-export const MENU_ROUTE = "menu";
+export const MENU_ROUTE = "/menu";
 export const MINING_AREA_ROUTE = `${DASHBOARD_ROUTE}/mining-area`;
 export const SHOP_ROUTE = `${DASHBOARD_ROUTE}/shop`;
 export const BASKET_ROUTE = `${SHOP_ROUTE}/basket`;

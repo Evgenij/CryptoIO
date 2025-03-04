@@ -9,7 +9,7 @@ import { AppDispatch } from "../../store";
 import { login, logout, registration } from "../../store/slices/userSlice";
 import { Button, InputText, Password } from "../../components/ui/index";
 import router from "../../router";
-import { LOGIN_ROUTE } from "../../constants/routes";
+import { LOGIN_ROUTE, MENU_ROUTE } from "../../constants/routes";
 
 interface Props {
 	className?: string;
@@ -24,8 +24,7 @@ const emptyUserData: IUser = {
 };
 
 export const AuthPage: FC<Props> = ({ className }) => {
-	const isLogin =
-		router.state.location.pathname === LOGIN_ROUTE;
+	const isLogin = router.state.location.pathname === LOGIN_ROUTE;
 
 	const dispatch = useDispatch<AppDispatch>();
 	const loading = useSelector((state: any) => state.user.loading);
@@ -47,6 +46,8 @@ export const AuthPage: FC<Props> = ({ className }) => {
 				dispatch(
 					login({ nickname: data.nickname, password: data.password })
 				);
+
+				router.navigate(MENU_ROUTE);
 			} else {
 				dispatch(
 					registration({
