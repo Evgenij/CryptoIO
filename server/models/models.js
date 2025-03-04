@@ -12,10 +12,18 @@ const User = sequelize.define("User", {
 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
 });
 
+const Career = sequelize.define("Career", {
+	lastEnter: { type: DataTypes.DATE, defaultValue: new Date(), unique: true },
+	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
+	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
+
+});
+
 const Token = sequelize.define("Token", {
 	refreshToken: { type: DataTypes.TEXT, unique: true },
 	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
+
 });
 
 const Cart = sequelize.define("Cart", {
@@ -142,26 +150,30 @@ const CharactComponent = sequelize.define("CharactComponent", {
 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
 });
 
-//1:M
-User.hasMany(Order);
-Order.belongsTo(User);
+// ----------------------- Relations ----------------------------
+
+//1:1
+Career.hasOne(User, {
+	onDelete: "CASCADE",
+	onUpdate: "CASCADE",
+});
+User.belongsTo(Career)
 
 //1:M
 User.hasMany(Token);
-Token.belongsTo(User);
+Token.belongsTo(User)
 
 //1:M
-Cart.hasMany(Order);
-Order.belongsTo(Cart);
+User.hasMany(Cart);
+Cart.belongsTo(User)
 
-//1:1
-Cart.hasOne(User, {
-	onDelete: "CASCADE",
-	onUpdate: "CASCADE",
-	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
-	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
-});
-User.belongsTo(Cart);
+//1:M
+Order.hasMany(Cart);
+Cart.belongsTo(Order);
+
+//1:M
+User.hasMany(Order);
+Order.belongsTo(User);
 
 //1:M
 Component.hasMany(SupportingComponents);
@@ -204,4 +216,4 @@ CharactComponent.belongsTo(Characteristic, {
 Component.hasMany(CharactComponent);
 CharactComponent.belongsTo(Component);
 
-module.exports = { User, Cart, Order, Component, Manufacturer, Type, Token };
+module.exports = { User, Career, Cart, Order, Component, Manufacturer, Type, Token };

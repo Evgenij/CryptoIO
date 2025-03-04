@@ -1,4 +1,4 @@
-const { User } = require("../models/models");
+const { User,  Cart} = require("../models/models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
@@ -26,8 +26,10 @@ class UserService {
 			email,
 			password: hashPassword,
 			nickname,
-			activationLink,
-		});
+			activationLink
+		})
+
+		await Cart.create({ UserId: user.id });
 
 		await mailService.sendActivationMail(
 			email,
@@ -61,7 +63,9 @@ class UserService {
 		const user = await User.findOne({ where: { nickname } });
 
 		if (!user) {
-			throw ApiError.badRequest("User don't found");
+			throw ApiError.badRequest(
+				`User with nickname "${nickname}" don't found`
+			);
 		}
 
 		const isPassEquals = await bcrypt.compare(password, user.password);
