@@ -20,3 +20,4 @@
 ## Back
 
 -   0.1 - API and models for Authentification
+-   0.2 - Create migration and seeder for User
