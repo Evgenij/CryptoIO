@@ -1,10 +1,9 @@
-const { responseStatuses } = require("../consts");
-const ApiError = require("../error/ApiError");
-const sendResponse = require("../helpers/sendResponse");
-// const { User } = require("../models/models");
+const { responseStatuses } = require("../../consts");
+const ApiError = require("../../error/ApiError");
+const sendResponse = require("../../helpers/sendResponse");
+const { User } = require("../../models/models");
 const { validationResult } = require("express-validator");
-const userService = require("../service/userService");
-const User = require("../db/models/user");
+const userService = require("../services/userService");
 
 class UserController {
 	async get(req, res, next) {
@@ -51,7 +50,7 @@ class UserController {
 				);
 
 				res.cookie("refreshToken", data.tokens.refreshToken, {
-					maxAge: 30 * 24 * 60 * 60 * 1000,
+					maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
 					httpOnly: true,
 				});
 
@@ -75,6 +74,7 @@ class UserController {
 			next(error);
 		}
 	}
+
 	async logout(req, res, next) {
 		try {
 			const { refreshToken } = req.cookies;
@@ -97,7 +97,8 @@ class UserController {
 			next(error);
 		}
 	}
-	async activateToken(req, res, next) {
+
+	async activate(req, res, next) {
 		try {
 			const activationLink = req.params.link;
 			await userService.activate(activationLink);
@@ -107,6 +108,7 @@ class UserController {
 			next(error);
 		}
 	}
+
 	async refreshToken(req, res, next) {
 		try {
 			const { refreshToken } = req.cookies;

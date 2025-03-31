@@ -19,7 +19,7 @@ router.post(
 );
 router.post("/login", userControllers.login);
 router.post("/logout", userControllers.logout);
-router.get("/activate/:link", userControllers.activateToken);
+router.get("/activate/:link", userControllers.activate);
 router.get("/refresh", userControllers.refreshToken);
 router.get("/get", AuthMiddleware, userControllers.getAllUsers); // TODO: For testing middleware of authorization
 
