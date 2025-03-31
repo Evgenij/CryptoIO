@@ -1,18 +1,17 @@
-// const { User,  Cart} = require("../models/models");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
-const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
-const UserDTO = require("../DTOs/userDTO");
-const ApiError = require("../error/ApiError");
+const UserDTO = require("../../DTOs/userDTO");
 const tokenService = require("./tokenService");
 const mailService = require("./mailService");
-const User = require("../db/models/user");
+const ApiError = require("../../error/ApiError");
 
 class UserService {
 	async registration(nickname, email, password) {
-		const candidate = await User.findOne({
-			where: { [Op.or]: [{ email }, { nickname }] },
+		const candidate = await prisma.user.findFirst({
+			where: { OR: [{ email }, { nickname }] },
 		});
 
 		if (candidate) {
@@ -24,14 +23,14 @@ class UserService {
 		const hashPassword = bcrypt.hashSync(password, 7);
 		const activationLink = uuid.v4();
 
-		const user = await User.create({
-			email,
-			password: hashPassword,
-			nickname,
-			activationLink,
+		const user = await prisma.user.create({
+			data: {
+				email,
+				password: hashPassword,
+				nickname,
+				activationLink,
+			},
 		});
-
-		//await Cart.create({ UserId: user.id });
 
 		await mailService.sendActivationMail(
 			email,
@@ -50,23 +49,28 @@ class UserService {
 	}
 
 	async activate(activationLink) {
-		const user = await User.findOne({ where: { activationLink } });
+		const user = await prisma.user.findFirst({
+			where: { activationLink },
+		});
 
 		if (!user) {
 			throw ApiError.badRequest("User don't found");
 		}
 
-		user.isActivated = true;
-
-		await user.save();
+		await prisma.user.update({
+			where: { id: user.id },
+			data: { isActivated: true },
+		});
 	}
 
 	async login(nickname, password) {
-		const user = await User.findOne({ where: { nickname } });
+		const user = await prisma.user.findFirst({
+			where: { nickname },
+		});
 
 		if (!user) {
 			throw ApiError.badRequest(
-				`User with nickname "${nickname}" don't found`
+				`User with nickname '${nickname}' don't found`
 			);
 		}
 
@@ -105,12 +109,16 @@ class UserService {
 		const userData = await tokenService.validateRefreshToken(refreshToken);
 		const tokenFromDB = await tokenService.findToken(refreshToken);
 
+		//console.log(userData, tokenFromDB);
+
 		if (!userData || !tokenFromDB) {
-			throw ApiError.forbidden("Tokens are not valid ");
+			throw ApiError.forbidden("Tokens are not valid");
 		}
 
-		const user = await User.findOne({ where: { id: userData.id } });
-		const userDTO = new UserDTO(user); // id, nickname, email, isActivated
+		const user = await prisma.user.findFirst({
+			where: { id: userData.id },
+		});
+		const userDTO = new UserDTO(user); // id, nickname, isActivated
 		const tokens = await tokenService.generateTokens({ ...userDTO });
 
 		await tokenService.saveToken(userDTO.id, tokens.refreshToken);
@@ -122,7 +130,13 @@ class UserService {
 	}
 
 	async getAllUsers() {
-		const users = await User.findAll();
+		const users = await prisma.user.findMany({
+			select: {
+				id: true,
+				nickname: true,
+				isActivated: true,
+			},
+		});
 		return users;
 	}
 }

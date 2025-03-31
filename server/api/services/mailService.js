@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const ApiError = require("../error/ApiError");
+const ApiError = require("../../error/ApiError");
 
 class MailService {
 	constructor() {
@@ -16,20 +16,24 @@ class MailService {
 
 	async sendActivationMail(to, link) {
 		try {
-			await this.transporter.sendMail({
-				from: process.env.SMTP_USER,
-				to,
-				subject: "Activation account for " + process.env.API_URL,
-				text: "",
-				html: `
+			if (process.env.MAILER_IS_ACTIVE === true) {
+				await this.transporter.sendMail({
+					from: process.env.SMTP_USER,
+					to,
+					subject: "Activation account for " + process.env.API_URL,
+					text: "",
+					html: `
 				<div>
 					<h1>For activation account, please click link</h1>
 					<a href="${link}">${link}</a>
 				</div>
 			`,
-			});
+				});
+			} else {
+				console.log("Mailer is off");
+			}
 		} catch (e) {
-			throw ApiError.badRequest("Message don't sent");
+			console.log(e);
 		}
 	}
 }
