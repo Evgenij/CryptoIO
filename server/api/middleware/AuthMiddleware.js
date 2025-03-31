@@ -1,5 +1,5 @@
-const ApiError = require("../error/ApiError");
-const tokenService = require("../service/tokenService");
+const ApiError = require("../../error/ApiError");
+const tokenService = require("../services/tokenService");
 module.exports = async function (req, res, next) {
 	try {
 		if (req.headers.authorization) {
