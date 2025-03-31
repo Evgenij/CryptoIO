@@ -3,7 +3,7 @@ import { IUser } from "../../api/models/IUser";
 import AuthService from "../../services/AuthService";
 import axios from "axios";
 import router from "../../router";
-import { DASHBOARD_ROUTE } from "../../constants/routes";
+import { DASHBOARD_ROUTE, MENU_ROUTE } from "../../constants/routes";
 import { IAuthResponse } from "../../api/models/response/IAuthResponse";
 import { API_URL } from "../../api";
 
@@ -65,8 +65,6 @@ const userSlice = createAppSlice({
 					state.isAuth = true;
 					state.loading = false;
 					state.userData = action.payload;
-
-					router.navigate(DASHBOARD_ROUTE).then();
 				},
 			}
 		),

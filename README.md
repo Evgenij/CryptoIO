@@ -15,7 +15,7 @@
 
 -   0.1 - Pages for Authentification
 -   0.2 - Authorization
--   0.3 - Page for Dashboard
+-   0.3 - Page for Dashboard and added tests
 
 ## Back
 
