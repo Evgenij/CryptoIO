@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const { Token } = require("../models/models");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 class TokenService {
 	async generateTokens(payload) {
@@ -7,7 +8,7 @@ class TokenService {
 			const accessToken = jwt.sign(
 				payload,
 				process.env.JWT_ACCESS_SECRET,
-				{ expiresIn: "30m" }
+				{ expiresIn: "15m" }
 			);
 			const refreshToken = jwt.sign(
 				payload,
@@ -24,20 +25,27 @@ class TokenService {
 		}
 	}
 
-	async saveToken(userID, refreshToken) {
+	async saveToken(userId, refreshToken) {
 		try {
-			const tokenData = await Token.findOne({
-				where: { UserId: userID },
+			const tokenData = await prisma.token.findFirst({
+				where: { userId },
 			});
 
+			//console.log(tokenData);
+
 			if (tokenData) {
-				tokenData.refreshToken = refreshToken;
-				return tokenData.save();
+				//tokenData.refreshToken = refreshToken;
+				return await prisma.token.update({
+					where: { id: tokenData.id },
+					data: { refreshToken },
+				});
 			}
 
-			return await Token.create({
-				UserId: userID,
-				refreshToken,
+			return await prisma.token.create({
+				data: {
+					refreshToken,
+					userId,
+				},
 			});
 		} catch (e) {
 			console.log(e);
@@ -46,7 +54,11 @@ class TokenService {
 
 	async removeToken(refreshToken) {
 		try {
-			await Token.destroy({
+			if (!refreshToken) {
+				throw ApiError.badRequest("No refresh token");
+			}
+
+			await prisma.token.delete({
 				where: { refreshToken },
 			});
 
@@ -73,8 +85,8 @@ class TokenService {
 
 	async findToken(refreshToken) {
 		try {
-			return await Token.findOne({
-				where: {refreshToken},
+			return await prisma.token.findFirst({
+				where: { refreshToken },
 			});
 		} catch (e) {
 			console.log(e);
