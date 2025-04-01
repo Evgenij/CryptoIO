@@ -3,7 +3,7 @@ import { IUser } from "../../api/models/IUser";
 import AuthService from "../../services/AuthService";
 import axios from "axios";
 import router from "../../router";
-import { DASHBOARD_ROUTE } from "../../constants/routes";
+import { DASHBOARD_ROUTE, MENU_ROUTE } from "../../constants/routes";
 import { IAuthResponse } from "../../api/models/response/IAuthResponse";
 import { API_URL } from "../../api";
 
@@ -65,8 +65,6 @@ const userSlice = createAppSlice({
 					state.isAuth = true;
 					state.loading = false;
 					state.userData = action.payload;
-
-					router.navigate(DASHBOARD_ROUTE).then();
 				},
 			}
 		),
@@ -178,7 +176,34 @@ const userSlice = createAppSlice({
 				},
 			}
 		),
+		getUserData: create.asyncThunk(
+			async (id: number) => {
+				try {
+					const response = await axios.get<IUser>(
+						`${API_URL}/user/${id}`
+					);
+
+					return response.data;
+				} catch (error) {
+					if (axios.isAxiosError(error)) {
+						return Promise.reject(error.response?.data.message);
+					} else {
+						console.log(error);
+					}
+				}
+			},
+			{
+				rejected: (state, action) => {
+					state.loading = false;
+					state.error = action.error.message;
+				},
+				fulfilled: (state, action) => {
+					state.userData = action.payload;
+				},
+			}
+		),
 	}),
 });
-export const { login, logout, registration, checkAuth } = userSlice.actions;
+export const { login, logout, registration, checkAuth, getUserData } =
+	userSlice.actions;
 export default userSlice.reducer;

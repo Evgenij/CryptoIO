@@ -1,12 +1,12 @@
 import { FC, useEffect } from "react";
 import { Logo } from "../../components/Logo";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { jc } from "../../utils/joinClasses";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { checkAuth } from "../../store/slices/userSlice";
 import router from "../../router";
-import { MENU_ROUTE } from "../../constants/routes";
+import { MENU_ROUTE, ROOT_ROUTE } from "../../constants/routes";
 
 export const AuthLayout: FC = () => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -15,11 +15,13 @@ export const AuthLayout: FC = () => {
 	useEffect(() => {
 		if (localStorage.getItem("token")) {
 			dispatch(checkAuth());
+		} else {
+			router.navigate(ROOT_ROUTE);
 		}
 	}, []);
 
 	if (isAuth) {
-		router.navigate(MENU_ROUTE);
+		return <Navigate to={MENU_ROUTE} />;
 	}
 
 	return (
