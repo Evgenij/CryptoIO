@@ -1,9 +1,7 @@
 import { buildCreateSlice, asyncThunkCreator } from "@reduxjs/toolkit";
 import { IUser } from "../../api/models/IUser";
 import AuthService from "../../services/AuthService";
-import axios from "axios";
-import router from "../../router";
-import { DASHBOARD_ROUTE, MENU_ROUTE } from "../../constants/routes";
+import axios from "axios"
 import { IAuthResponse } from "../../api/models/response/IAuthResponse";
 import { API_URL } from "../../api";
 

@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { jc } from "../../utils/joinClasses";
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ROOT_ROUTE } from "../../constants/routes";
