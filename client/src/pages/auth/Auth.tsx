@@ -9,7 +9,7 @@ import { AppDispatch } from "../../store";
 import { login, logout, registration } from "../../store/slices/userSlice";
 import { Button, InputText, Password } from "../../components/ui/index";
 import router from "../../router";
-import { LOGIN_ROUTE, MENU_ROUTE } from "../../constants/routes";
+import { LOGIN_ROUTE, MENU_ROUTE } from "../../router/routes";
 
 interface Props {
 	className?: string;

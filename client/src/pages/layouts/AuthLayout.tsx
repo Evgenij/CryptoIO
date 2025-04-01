@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { checkAuth } from "../../store/slices/userSlice";
 import router from "../../router";
-import { MENU_ROUTE, ROOT_ROUTE } from "../../constants/routes";
+import { MENU_ROUTE, ROOT_ROUTE } from "../../router/routes";
 
 export const AuthLayout: FC = () => {
 	const dispatch = useDispatch<AppDispatch>();

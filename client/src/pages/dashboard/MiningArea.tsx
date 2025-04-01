@@ -9,7 +9,7 @@ interface IData {
 	key: string;
 }
 
-export const Dashboard: FC<Props> = ({ className }) => {
+export const MiningArea: FC<Props> = ({ className }) => {
 	// state
 	const [] = useState<IData>({ key: "data" });
 
@@ -24,5 +24,5 @@ export const Dashboard: FC<Props> = ({ className }) => {
 	// hooks
 	useEffect(() => {}, []);
 
-	return <div className={jc(className, "text-white")}>Dashboard</div>;
+	return <div className={jc(className, "text-white")}>MiningArea</div>;
 };

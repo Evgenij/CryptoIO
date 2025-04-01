@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../../constants/routes";
+import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../../router/routes";
 
 interface Props {
 	className?: string;
@@ -16,7 +16,7 @@ export const Root: FC<Props> = () => {
 				</Link>
 				<span className="opacity-30">or</span>
 				<Link to={LOGIN_ROUTE}>
-					<Button label="Login" outlined/>
+					<Button label="Login" outlined />
 				</Link>
 			</div>
 		</form>

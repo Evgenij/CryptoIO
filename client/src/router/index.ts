@@ -3,15 +3,18 @@ import {
 	DASHBOARD_ROUTE,
 	LOGIN_ROUTE,
 	MENU_ROUTE,
+	ROOT_DASHBOARD_ROUTE,
 	REGISTRATION_ROUTE,
 	ROOT_ROUTE,
-} from "../constants/routes.ts";
+	SHOP_ROUTE,
+} from "./routes.ts";
 import { AuthLayout } from "../pages/layouts/AuthLayout.tsx";
 import { Root } from "../pages/auth/Root.tsx";
 import { AuthPage } from "../pages/auth/Auth.tsx";
 import { DashboardLayout } from "../pages/layouts/DashboardLayout.tsx";
-import { Dashboard } from "../pages/dashboard/Dashboard.tsx";
+import { MiningArea } from "../pages/dashboard/MiningArea.tsx";
 import { Menu } from "../pages/Menu.tsx";
+import { Shop } from "../pages/dashboard/shop/Shop.tsx";
 
 const router = createBrowserRouter([
 	//public routes
@@ -40,12 +43,16 @@ const router = createBrowserRouter([
 	},
 
 	{
-		path: DASHBOARD_ROUTE,
+		path: ROOT_DASHBOARD_ROUTE,
 		Component: DashboardLayout,
 		children: [
 			{
 				path: DASHBOARD_ROUTE,
-				Component: Dashboard,
+				Component: MiningArea,
+			},
+			{
+				path: SHOP_ROUTE,
+				Component: Shop,
 			},
 		],
 	},

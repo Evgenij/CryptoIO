@@ -1,0 +1,6 @@
+.RadioButton {
+	input:checked + label {
+		color: black;
+		background-color: white;
+	}
+}

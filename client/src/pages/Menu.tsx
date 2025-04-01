@@ -2,11 +2,10 @@ import { FC, useState, useEffect } from "react";
 import { jc } from "../utils/joinClasses";
 import { Logo } from "../components/Logo";
 import { MenuButton } from "../components/ui";
-import { DASHBOARD_ROUTE } from "../constants/routes";
+import { DASHBOARD_ROUTE, ROOT_DASHBOARD_ROUTE } from "../router/routes";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../store/slices/userSlice";
 import { AppDispatch } from "../store";
-import router from "../router";
 
 export const Menu: FC = () => {
 	// state

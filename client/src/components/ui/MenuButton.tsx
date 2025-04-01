@@ -1,6 +1,5 @@
 import React, { FC } from "react";
-import styles from "./MenuButton.module.scss";
-import { jc } from "../../../utils/joinClasses";
+import { jc } from "../../utils/joinClasses";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -22,7 +21,6 @@ export const MenuButton: FC<Props> = ({
 		<button
 			className={jc(
 				className,
-				styles.menuButton,
 				"group flex flex-col bg-white/5 border-white/5 text-left w-full hover:bg-white/10 hover:border-white/10"
 			)}
 		>

@@ -1,5 +1,6 @@
 @use "tailwindcss";
 @use "./prime-react.scss";
+@use "./vars.scss" as vars;
 
 @import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=VT323&display=swap");
 
@@ -7,5 +8,10 @@ body {
 	* {
 		transition: 0.1s;
 		font-family: "Chakra Petch", sans-serif;
+		line-height: 1.5;
 	}
+}
+
+.text-primary {
+	color: vars.$primary;
 }
