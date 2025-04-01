@@ -176,7 +176,34 @@ const userSlice = createAppSlice({
 				},
 			}
 		),
+		getUserData: create.asyncThunk(
+			async (id: number) => {
+				try {
+					const response = await axios.get<IUser>(
+						`${API_URL}/user/${id}`
+					);
+
+					return response.data;
+				} catch (error) {
+					if (axios.isAxiosError(error)) {
+						return Promise.reject(error.response?.data.message);
+					} else {
+						console.log(error);
+					}
+				}
+			},
+			{
+				rejected: (state, action) => {
+					state.loading = false;
+					state.error = action.error.message;
+				},
+				fulfilled: (state, action) => {
+					state.userData = action.payload;
+				},
+			}
+		),
 	}),
 });
-export const { login, logout, registration, checkAuth } = userSlice.actions;
+export const { login, logout, registration, checkAuth, getUserData } =
+	userSlice.actions;
 export default userSlice.reducer;

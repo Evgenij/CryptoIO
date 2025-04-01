@@ -139,6 +139,10 @@ class UserService {
 		});
 		return users;
 	}
+
+	async getData(id) {
+		return await prisma.user.findUnique({ where: { id: id } });
+	}
 }
 
 module.exports = new UserService();

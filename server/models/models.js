@@ -9,17 +9,17 @@
 // 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
 // };
 
-const Career = sequelize.define("Career", {
-	lastEnter: { type: DataTypes.DATE, defaultValue: new Date(), unique: true },
-	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
-	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
-});
+// const Career = sequelize.define("Career", {
+// 	lastEnter: { type: DataTypes.DATE, defaultValue: new Date(), unique: true },
+// 	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
+// 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
+// });
 
-const Token = sequelize.define("Token", {
-	refreshToken: { type: DataTypes.TEXT, unique: true },
-	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
-	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
-});
+// const Token = sequelize.define("Token", {
+// 	refreshToken: { type: DataTypes.TEXT, unique: true },
+// 	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
+// 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
+// });
 
 // const Cart = {
 // 	id: {
@@ -132,92 +132,15 @@ const Token = sequelize.define("Token", {
 // 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
 // };
 
-const CharactComponent = sequelize.define("CharactComponent", {
-	id: {
-		type: DataTypes.INTEGER,
-		primaryKey: true,
-		autoIncrement: true,
-	},
-	name: { type: DataTypes.STRING, unique: true },
-	label: { type: DataTypes.STRING },
-	value: { type: DataTypes.REAL, defaultValue: 0 },
-	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
-	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
-});
-
-// ----------------------- Relations ----------------------------
-
-//1:1
-Career.hasOne(User, {
-	onDelete: "CASCADE",
-	onUpdate: "CASCADE",
-});
-User.belongsTo(Career);
-
-//1:M
-User.hasMany(Token);
-Token.belongsTo(User);
-
-//1:M
-User.hasMany(Cart);
-Cart.belongsTo(User);
-
-//1:M
-Order.hasMany(Cart);
-Cart.belongsTo(Order);
-
-//1:M
-User.hasMany(Order);
-Order.belongsTo(User);
-
-//1:M
-Component.hasMany(SupportingComponents);
-SupportingComponents.belongsTo(Component);
-
-//1:M
-Type.hasMany(Component);
-Component.belongsTo(Type);
-
-//1:M
-Manufacturer.hasMany(Component);
-Component.belongsTo(Manufacturer);
-
-//1:M
-Order.hasMany(OrderComponent);
-OrderComponent.belongsTo(Order);
-
-//1:M
-Component.hasMany(OrderComponent);
-OrderComponent.belongsTo(Component);
-
-//1:M
-Station.hasMany(ComponentStation);
-ComponentStation.belongsTo(Station);
-
-//1:M
-Component.hasMany(ComponentStation);
-ComponentStation.belongsTo(Component);
-
-//1:M
-Characteristic.hasMany(CharactComponent);
-CharactComponent.belongsTo(Characteristic, {
-	onDelete: "CASCADE",
-	onUpdate: "CASCADE",
-	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
-	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
-});
-
-//1:M
-Component.hasMany(CharactComponent);
-CharactComponent.belongsTo(Component);
-
-module.exports = {
-	User,
-	Career,
-	Cart,
-	Order,
-	Component,
-	Manufacturer,
-	Type,
-	Token,
-};
+// const CharactComponent = sequelize.define("CharactComponent", {
+// 	id: {
+// 		type: DataTypes.INTEGER,
+// 		primaryKey: true,
+// 		autoIncrement: true,
+// 	},
+// 	name: { type: DataTypes.STRING, unique: true },
+// 	label: { type: DataTypes.STRING },
+// 	value: { type: DataTypes.REAL, defaultValue: 0 },
+// 	createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
+// 	updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
+// });

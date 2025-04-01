@@ -1,22 +1,20 @@
 const { responseStatuses } = require("../../consts");
 const ApiError = require("../../error/ApiError");
-const sendResponse = require("../../helpers/sendResponse");
-const { User } = require("../../models/models");
 const { validationResult } = require("express-validator");
 const userService = require("../services/userService");
 
 class UserController {
 	async get(req, res, next) {
-		const { id } = req.body;
+		const { id } = req.params;
 
 		if (!id) {
 			next(ApiError.badRequest("Id don't set"));
 		} else {
 			try {
-				const user = await User.findOne({ where: { id } });
+				const user = await userService.getData(+id);
 
 				if (user) {
-					sendResponse(res, { user });
+					return res.status(responseStatuses.OK).json(user);
 				} else {
 					next(ApiError.badRequest("User don't found"));
 				}
