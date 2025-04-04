@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import { jc } from "../utils/joinClasses";
 import { Logo } from "../components/Logo";
 import { MenuButton } from "../components/ui";
-import { DASHBOARD_ROUTE, ROOT_DASHBOARD_ROUTE } from "../router/routes";
+import { MINING_ROUTE } from "../router/routes";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../store/slices/userSlice";
 import { AppDispatch } from "../store";
@@ -10,7 +10,7 @@ import { AppDispatch } from "../store";
 export const Menu: FC = () => {
 	// state
 	const [] = useState();
-	let user = useSelector((state: any) => state.user.userData);
+	let user = useSelector((state: any) => state.user.data);
 	const dispatch = useDispatch<AppDispatch>();
 
 	// inner functions
@@ -37,10 +37,7 @@ export const Menu: FC = () => {
 			<section className="flex menu gap-5 text-white">
 				<div className="menu_col flex flex-col gap-5">
 					<div className="menu_row">
-						<MenuButton
-							header="Continue career"
-							to={DASHBOARD_ROUTE}
-						>
+						<MenuButton header="Continue career" to={MINING_ROUTE}>
 							<main className="flex flex-col h-50 w-100 justify-end p-3 relative overflow-hidden">
 								<img
 									className="absolute -top-5 -right-30 group-hover:scale-105"
@@ -56,7 +53,7 @@ export const Menu: FC = () => {
 						</MenuButton>
 					</div>
 					<div className="menu_row">
-						<MenuButton header="New career" to={DASHBOARD_ROUTE}>
+						<MenuButton header="New career" to={MINING_ROUTE}>
 							<main className="flex flex-col h-30 w-100 justify-center items-center p-3 relative overflow-hidden">
 								<img
 									className="absolute left-5 scale-80 opacity-0 group-hover:scale-100 group-hover:opacity-100"
@@ -73,7 +70,7 @@ export const Menu: FC = () => {
 					<div className="menu_row">
 						<MenuButton
 							header="Log out"
-							to={DASHBOARD_ROUTE}
+							to={MINING_ROUTE}
 						></MenuButton>
 					</div>
 				</div>
@@ -81,7 +78,7 @@ export const Menu: FC = () => {
 					<MenuButton
 						className="h-full"
 						header="Partners"
-						to={DASHBOARD_ROUTE}
+						to={MINING_ROUTE}
 					>
 						<main className="flex-1 w-60 p-3 relative overflow-hidden">
 							<img
@@ -98,7 +95,7 @@ export const Menu: FC = () => {
 					<MenuButton
 						className="h-full"
 						header="Players"
-						to={DASHBOARD_ROUTE}
+						to={MINING_ROUTE}
 					>
 						<main className="flex-1 w-60 p-3 relative overflow-hidden">
 							<img

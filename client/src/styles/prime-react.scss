@@ -34,6 +34,11 @@ $amountActive: 20;
 				background-color: white;
 				color: vars.$black;
 			}
+
+			&:active {
+				transform: none;
+				box-shadow: none;
+			}
 		}
 
 		&.white {

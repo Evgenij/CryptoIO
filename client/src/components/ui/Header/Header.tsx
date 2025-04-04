@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import {
 	CART_ROUTE,
-	DASHBOARD_ROUTE,
+	MINING_ROUTE,
 	RESEARCH_ROUTE,
 	SHOP_ROUTE,
 	STORAGE_ROUTE,
@@ -69,7 +69,7 @@ export const Header: FC<Props> = ({ className }) => {
 				/>
 				<menu className="flex divide-x-1 divide-white/10">
 					<NavigationButton
-						to={DASHBOARD_ROUTE}
+						to={MINING_ROUTE}
 						text="Mining area"
 						icon={<Cpu />}
 					/>

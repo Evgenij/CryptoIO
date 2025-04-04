@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { jc } from "../../../utils/joinClasses";
-import { GroupRadioButtons } from "../../../components/ui";
+import { GroupRadioButtons, Product } from "../../../components/ui";
 
 interface Props {
 	className?: string;
@@ -14,6 +14,36 @@ export const Shop: FC<Props> = ({ className }) => {
 	// state
 	const [] = useState<IData>({ key: "data" });
 	const [selectedCategory, setSelectedCategory] = useState<number>(1);
+
+	const products = [
+		{
+			id: 1,
+			name: "Some name",
+			image: new URL(
+				"../../../images/components/cpu/cpu1-lvl1.png",
+				import.meta.url
+			).href,
+			level: 1,
+		},
+		{
+			id: 2,
+			name: "Some name",
+			image: new URL(
+				"../../../images/components/cpu/cpu1-lvl2.png",
+				import.meta.url
+			).href,
+			level: 2,
+		},
+		{
+			id: 3,
+			name: "Some name",
+			image: new URL(
+				"../../../images/components/cpu/cpu1-lvl3.png",
+				import.meta.url
+			).href,
+			level: 3,
+		},
+	];
 
 	// inner functions
 	const someFunc = () => {};
@@ -44,7 +74,17 @@ export const Shop: FC<Props> = ({ className }) => {
 					</section>
 				</div>
 			</aside>{" "}
-			<section>2321</section>
+			<section className="w-full">
+				<div className="products-list grid grid-cols-4 gap-3">
+					{products.map((product) => (
+						<Product
+							key={product.id}
+							environment="shop"
+							data={product}
+						/>
+					))}
+				</div>
+			</section>
 		</div>
 	);
 };

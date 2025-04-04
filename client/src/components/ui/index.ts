@@ -5,3 +5,6 @@ export { Password } from "primereact/password";
 export { MenuButton } from "./MenuButton.tsx";
 export { Header } from "./Header/Header.tsx";
 export { GroupRadioButtons } from "./filter/group-radio-buttons/GroupRadioButtons.tsx";
+export { Counter } from "./Counter.tsx";
+export { Product } from "./Product.tsx";
+export { ProductImageDisplay } from "./ProductImageDisplay/ProductImageDisplay.tsx";

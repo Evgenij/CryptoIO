@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { jc } from "../../utils/joinClasses";
+import { Product } from "../../components/ui";
 
 interface Props {
 	className?: string;
@@ -24,5 +25,5 @@ export const MiningArea: FC<Props> = ({ className }) => {
 	// hooks
 	useEffect(() => {}, []);
 
-	return <div className={jc(className, "text-white")}>MiningArea</div>;
+	return <div className={jc(className, "text-white")}></div>;
 };

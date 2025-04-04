@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import {
-	DASHBOARD_ROUTE,
 	LOGIN_ROUTE,
 	MENU_ROUTE,
 	ROOT_DASHBOARD_ROUTE,
 	REGISTRATION_ROUTE,
 	ROOT_ROUTE,
 	SHOP_ROUTE,
+	MINING_ROUTE,
 } from "./routes.ts";
 import { AuthLayout } from "../pages/layouts/AuthLayout.tsx";
 import { Root } from "../pages/auth/Root.tsx";
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
 		Component: DashboardLayout,
 		children: [
 			{
-				path: DASHBOARD_ROUTE,
+				path: MINING_ROUTE,
 				Component: MiningArea,
 			},
 			{

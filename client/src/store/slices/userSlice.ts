@@ -1,19 +1,19 @@
 import { buildCreateSlice, asyncThunkCreator } from "@reduxjs/toolkit";
 import { IUser } from "../../api/models/IUser";
 import AuthService from "../../services/AuthService";
-import axios from "axios"
+import axios from "axios";
 import { IAuthResponse } from "../../api/models/response/IAuthResponse";
 import { API_URL } from "../../api";
 
 export interface IUserSliceState {
-	userData: IUser | null | undefined;
+	data: IUser | null | undefined;
 	isAuth: boolean;
 	loading: boolean;
 	error: string | null | undefined;
 }
 
 const initialState: IUserSliceState = {
-	userData: null,
+	data: null,
 	isAuth: false,
 	loading: false,
 	error: null,
@@ -62,7 +62,7 @@ const userSlice = createAppSlice({
 				fulfilled: (state, action) => {
 					state.isAuth = true;
 					state.loading = false;
-					state.userData = action.payload;
+					state.data = action.payload;
 				},
 			}
 		),
@@ -103,7 +103,7 @@ const userSlice = createAppSlice({
 				fulfilled: (state, action) => {
 					state.loading = false;
 					state.isAuth = true;
-					state.userData = action.payload;
+					state.data = action.payload;
 				},
 			}
 		),
@@ -132,7 +132,7 @@ const userSlice = createAppSlice({
 				fulfilled: (state) => {
 					state.isAuth = false;
 					state.loading = false;
-					state.userData = {} as IUser;
+					state.data = {} as IUser;
 				},
 			}
 		),
@@ -170,7 +170,7 @@ const userSlice = createAppSlice({
 				fulfilled: (state, action) => {
 					state.isAuth = true;
 					state.loading = false;
-					state.userData = action.payload;
+					state.data = action.payload;
 				},
 			}
 		),
@@ -196,7 +196,7 @@ const userSlice = createAppSlice({
 					state.error = action.error.message;
 				},
 				fulfilled: (state, action) => {
-					state.userData = action.payload;
+					state.data = action.payload;
 				},
 			}
 		),

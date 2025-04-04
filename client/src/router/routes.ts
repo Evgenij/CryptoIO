@@ -7,7 +7,7 @@ export const ROOT_DASHBOARD_ROUTE = "/dashboard";
 
 export const MENU_ROUTE = "/menu";
 
-export const DASHBOARD_ROUTE = `${ROOT_DASHBOARD_ROUTE}/mining-area`;
+export const MINING_ROUTE = `${ROOT_DASHBOARD_ROUTE}/mining-area`;
 export const SHOP_ROUTE = `${ROOT_DASHBOARD_ROUTE}/shop`;
 export const CART_ROUTE = `${SHOP_ROUTE}/cart`;
 export const STORAGE_ROUTE = `${ROOT_DASHBOARD_ROUTE}/storage`;
