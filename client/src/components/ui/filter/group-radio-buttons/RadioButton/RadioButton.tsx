@@ -7,7 +7,7 @@ interface Props {
 	checked: boolean;
 	name: string;
 	className?: string;
-	onSelectItem: (id: number) => void;
+	onSelectItem: (item: Props["category"]) => void;
 }
 
 interface IData {
@@ -43,11 +43,11 @@ export const RadioButton: FC<Props> = ({
 				name={name}
 				id={category.name}
 				className="hidden"
-				onChange={() => onSelectItem?.(category.id)}
+				onChange={() => onSelectItem?.(category)}
 			/>
 			<label
 				className={jc(
-					"block p-1 px-2 bg-white/5 cursor-pointer font-medium"
+					"block p-2 bg-white/5 cursor-pointer hover:bg-white/10"
 				)}
 				htmlFor={category.name}
 			>

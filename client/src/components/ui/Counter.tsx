@@ -36,12 +36,12 @@ export const Counter: FC<Props> = ({
 				outlined
 				label="-"
 				size="small"
-				className="w-[40px]"
+				className="w-[36px]"
 				name="minus"
 				disabled={value === minValue}
 				onClick={() => handlerClick(ECounter.minus)}
 			/>
-			<span className="flex items-center justify-center w-[40px]">
+			<span className="flex items-center justify-center w-[36px]">
 				{value}
 			</span>
 			<Button
@@ -50,7 +50,7 @@ export const Counter: FC<Props> = ({
 				label="+"
 				size="small"
 				name="plus"
-				className="w-[40px]"
+				className="w-[36px]"
 				onClick={() => handlerClick(ECounter.plus)}
 			/>
 		</div>

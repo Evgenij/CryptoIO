@@ -97,6 +97,86 @@ $amountActive: 20;
 	}
 }
 
+@mixin multiselect() {
+	&-multiselect {
+		padding: 0 0.3rem;
+		padding-right: 0.1em;
+		background-color: rgba($color: white, $alpha: 0.05);
+
+		&-label {
+			align-items: center;
+			display: flex;
+			padding: 0;
+			height: 40px;
+		}
+
+		&-item {
+			padding: 0.4rem;
+			border-radius: 0;
+			margin: 0;
+
+			.p-checkbox {
+				padding: 0;
+
+				.p-checkbox-box {
+					position: absolute;
+					top: -2px;
+					left: 2px;
+					border-radius: 0;
+					border-color: rgba($color: white, $alpha: 0.05);
+					background: rgba($color: white, $alpha: 0.05);
+				}
+			}
+
+			&.p-highlight {
+				color: vars.$primary;
+				background-color: rgba($color: vars.$primary, $alpha: 0.05);
+
+				.p-checkbox-box {
+					border-color: vars.$primary;
+					background: vars.$primary;
+				}
+			}
+		}
+
+		&-checkbox {
+			padding: 0.1em;
+		}
+
+		&-token {
+			background-color: rgba($color: white, $alpha: 0.05);
+			border-radius: 0;
+			padding: 0.2em 0.4em;
+			margin-right: 0.3rem;
+		}
+
+		&-trigger {
+			width: 2rem;
+		}
+
+		&-panel {
+			padding: 0;
+			background-color: #222223;
+		}
+
+		&-items {
+			padding: 0;
+		}
+
+		&-header {
+			display: none;
+		}
+
+		&:hover {
+			background-color: rgba($color: white, $alpha: 0.2);
+		}
+
+		&:focus {
+			border-color: rgba($color: white, $alpha: 0.5);
+		}
+	}
+}
+
 .p {
 	&-component {
 		box-sizing: border-box;
@@ -158,4 +238,5 @@ $amountActive: 20;
 	@include button;
 	@include input;
 	@include message;
+	@include multiselect;
 }
