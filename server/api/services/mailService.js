@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const ApiError = require("../../error/ApiError");
 
 class MailService {
 	constructor() {

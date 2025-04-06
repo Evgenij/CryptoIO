@@ -1,11 +1,9 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
-
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const UserDTO = require("../../DTOs/userDTO");
 const tokenService = require("./tokenService");
 const mailService = require("./mailService");
+const { prisma } = require("../../prisma/prismaClient");
 const ApiError = require("../../error/ApiError");
 
 class UserService {

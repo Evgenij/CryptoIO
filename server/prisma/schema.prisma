@@ -39,3 +39,12 @@ model Token {
 
   @@map("tokens")
 }
+
+model Type {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime? @default(now())
+  updateAt  DateTime? @updatedAt
+
+  @@map("types")
+}
