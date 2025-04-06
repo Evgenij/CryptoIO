@@ -22,7 +22,11 @@ model User {
   activationLink String
   createdAt      DateTime? @default(now())
   updateAt       DateTime? @updatedAt
-  tokens         Token[]
+
+  // has many ...
+  tokens   Token[]
+  stations Station[]
+  orders   Order[]
 
   @@map("users")
 }
@@ -40,11 +44,149 @@ model Token {
   @@map("tokens")
 }
 
+// statuses of order
+// 0 - created
+// 1 - paid
+// 2 - delivered
+// 3 - closed
+// 4 - canceled
+
+model Order {
+  id          Int       @id @default(autoincrement())
+  date        DateTime  @default(now())
+  totalAmount Float     @default(0)
+  status      Int       @default(0)
+  createdAt   DateTime? @default(now())
+  updateAt    DateTime? @updatedAt
+
+  // User 1-M Token 
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  orderComponents OrderComponent[]
+
+  @@map("orders")
+}
+
+model OrderComponent {
+  id       Int @id @default(autoincrement())
+  quantity Int @default(1)
+
+  createdAt   DateTime?  @default(now())
+  updateAt    DateTime?  @updatedAt
+  Order       Order?     @relation(fields: [orderId], references: [id])
+  orderId     Int?
+  Component   Component? @relation(fields: [componentId], references: [id])
+  componentId Int?
+
+  @@map("order_comp")
+}
+
 model Type {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  components Component[]
+  createdAt  DateTime?   @default(now())
+  updateAt   DateTime?   @updatedAt
+
+  @@map("types")
+}
+
+model Manufacturer {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  components Component[]
+  createdAt  DateTime?   @default(now())
+  updateAt   DateTime?   @updatedAt
+
+  @@map("manufacturers")
+}
+
+model Component {
+  id                  Int       @id @default(autoincrement())
+  name                String    @unique
+  model               String    @unique
+  level               Int       @default(1)
+  image               String    @unique
+  watt                Float
+  electricConsumption Float
+  price               Float
+  createdAt           DateTime? @default(now())
+  updateAt            DateTime? @updatedAt
+
+  Type               Type?               @relation(fields: [typeId], references: [id])
+  typeId             Int?
+  Manufacturer       Manufacturer?       @relation(fields: [manufacturerId], references: [id])
+  manufacturerId     Int?
+  supportComponent   SupportComponent[]
+  componentsStations ComponentStation[]
+  specificComponent  SpecificComponent[]
+  orderComponents    OrderComponent[]
+
+  @@map("components")
+}
+
+model Station {
+  id                 Int                @id @default(autoincrement())
+  name               String             @unique
+  createdAt          DateTime?          @default(now())
+  updateAt           DateTime?          @updatedAt
+  User               User?              @relation(fields: [userId], references: [id])
+  userId             Int?
+  componentsStations ComponentStation[]
+
+  @@map("stations")
+}
+
+model ComponentStation {
+  id            Int     @id @default(autoincrement())
+  temperature   Float   @default(20)
+  rating        Int     @default(0)
+  isBenchmarked Boolean @default(false)
+
   createdAt DateTime? @default(now())
   updateAt  DateTime? @updatedAt
 
-  @@map("types")
+  Component   Component? @relation(fields: [componentId], references: [id])
+  componentId Int?
+  Station     Station?   @relation(fields: [stationId], references: [id])
+  stationId   Int?
+
+  @@map("comp_station")
+}
+
+model SupportComponent {
+  id                 Int        @id @default(autoincrement())
+  supportedComponent Int
+  createdAt          DateTime?  @default(now())
+  updateAt           DateTime?  @updatedAt
+  Component          Component? @relation(fields: [componentId], references: [id])
+  componentId        Int?
+
+  @@map("supp_comp")
+}
+
+model Specification {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  label     String    @unique
+  createdAt DateTime? @default(now())
+  updateAt  DateTime? @updatedAt
+
+  specificComponent SpecificComponent[]
+
+  @@map("specifications")
+}
+
+model SpecificComponent {
+  id              Int            @id @default(autoincrement())
+  value           Float          @default(0)
+  createdAt       DateTime?      @default(now())
+  updateAt        DateTime?      @updatedAt
+  Specification   Specification? @relation(fields: [specificationId], references: [id])
+  specificationId Int?
+  Component       Component?     @relation(fields: [componentId], references: [id])
+  componentId     Int?
+
+  @@map("specif_comp")
 }

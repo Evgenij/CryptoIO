@@ -1,12 +1,13 @@
 const { prisma } = require("./prismaClient");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
+const { types, manufacturers } = require("./seederConstants");
 
 async function main() {
 	const hashPassword = bcrypt.hashSync("pass", 7);
 	const activationLink = uuid.v4();
 
-	// user
+	//---------- user
 	await prisma.user.upsert({
 		where: { email: "mail@gmail.com" },
 		update: {},
@@ -19,19 +20,7 @@ async function main() {
 		},
 	});
 
-	const types = [
-		"RIGs",
-		"Motherboards",
-		"CPUs",
-		"Thermal greases",
-		"FANs",
-		"GPUs",
-		"RAMs",
-		"SSDs",
-		"Power supplies",
-	];
-
-	//types
+	//---------- types
 	types.forEach(async (type) => {
 		await prisma.type.upsert({
 			where: { name: type },
@@ -41,7 +30,21 @@ async function main() {
 			},
 		});
 	});
+
+	//const typesFromDB = await prisma.type.findMany();
+
+	//---------- manufacturers
+	manufacturers.forEach(async (manufacturerItem) => {
+		await prisma.manufacturer.upsert({
+			where: { name: manufacturerItem },
+			update: {},
+			create: {
+				name: manufacturerItem,
+			},
+		});
+	});
 }
+
 main()
 	.then(async () => {
 		await prisma.$disconnect();
