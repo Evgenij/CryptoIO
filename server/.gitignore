@@ -9,6 +9,7 @@ lerna-debug.log*
 
 .env
 node_modules
+prisma/migrations
 dist
 dist-ssr
 *.local
