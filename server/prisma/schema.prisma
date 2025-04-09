@@ -107,9 +107,9 @@ model Component {
   name                String    @unique
   model               String    @unique
   level               Int       @default(1)
-  image               String    @unique
-  watt                Float
-  electricConsumption Float
+  image               String
+  watt                Float     @default(0)
+  electricConsumption Float     @default(0)
   price               Float
   createdAt           DateTime? @default(now())
   updateAt            DateTime? @updatedAt
