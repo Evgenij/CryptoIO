@@ -4,14 +4,10 @@ import { Counter } from "./Counter";
 import { ProductImageDisplay } from "./ProductImageDisplay/ProductImageDisplay";
 import { Button } from "primereact/button";
 import { formattingNumber } from "../../utils/formattingNumber";
+import { Product as ProductModel } from "../../api/models/Product";
 
 interface Props {
-	data: {
-		id: number;
-		name: string;
-		image: string;
-		level: number;
-	};
+	data: ProductModel;
 	environment: "shop" | "storage";
 	className?: string;
 }

@@ -142,6 +142,9 @@ export const Shop: FC = () => {
 								<Skeleton width="full"></Skeleton>
 							</div>
 						)}
+						{errorTypes && (
+							<p className="text-red-500">Types don't loaded</p>
+						)}
 					</section>
 					<section className="px-3 flex flex-col gap-1">
 						<h3 className="text-sm ">Levels</h3>
