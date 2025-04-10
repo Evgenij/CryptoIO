@@ -1,13 +1,13 @@
-import $api from "../api";
+import $api from "..";
 import { AxiosResponse } from "axios";
-import { IAuthResponse } from "../api/models/response/IAuthResponse";
+import { IAuthResponse } from "../models/response/IAuthResponse";
 
 export default class AuthService {
 	static async login(
 		nickname: string,
 		password: string
 	): Promise<AxiosResponse<IAuthResponse>> {
-		return $api.post<IAuthResponse>("/user/login", { nickname, password });
+		return $api.post<IAuthResponse>("/users/login", { nickname, password });
 	}
 
 	static async registration(
@@ -15,7 +15,7 @@ export default class AuthService {
 		email: string,
 		password: string
 	): Promise<AxiosResponse<IAuthResponse>> {
-		return $api.post<IAuthResponse>("/user/registration", {
+		return $api.post<IAuthResponse>("/users/registration", {
 			nickname,
 			email,
 			password,
@@ -23,6 +23,6 @@ export default class AuthService {
 	}
 
 	static async logout(): Promise<AxiosResponse<void>> {
-		return $api.post("/user/logout");
+		return $api.post("/users/logout");
 	}
 }

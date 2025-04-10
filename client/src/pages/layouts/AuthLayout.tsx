@@ -4,13 +4,13 @@ import { Navigate, Outlet } from "react-router-dom";
 import { jc } from "../../utils/joinClasses";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
-import { checkAuth } from "../../store/slices/userSlice";
+import { checkAuth } from "../../store/slices/usersSlice";
 import router from "../../router";
 import { MENU_ROUTE, ROOT_ROUTE } from "../../router/routes";
 
 export const AuthLayout: FC = () => {
 	const dispatch = useDispatch<AppDispatch>();
-	const isAuth = useSelector((state: any) => state.user.isAuth);
+	const isAuth = useSelector((state: any) => state.users.isAuth);
 
 	useEffect(() => {
 		if (localStorage.getItem("token")) {

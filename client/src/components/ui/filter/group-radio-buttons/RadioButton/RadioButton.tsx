@@ -1,28 +1,24 @@
 import React, { FC, useState, useEffect } from "react";
 import styles from "./RadioButton.module.scss";
 import { jc } from "../../../../../utils/joinClasses";
+import { Type } from "../../../../../api/models/Type";
 
 interface Props {
-	category: { id: number; name: string };
+	type: Type;
 	checked: boolean;
 	name: string;
 	className?: string;
-	onSelectItem: (item: Props["category"]) => void;
-}
-
-interface IData {
-	key: string;
+	onSelectItem: (item: Props["type"]) => void;
 }
 
 export const RadioButton: FC<Props> = ({
 	className,
-	category,
+	type,
 	name,
 	checked,
 	onSelectItem,
 }) => {
 	// state
-	const [] = useState<IData>({ key: "data" });
 
 	// inner functions
 	const someFunc = () => {};
@@ -41,17 +37,17 @@ export const RadioButton: FC<Props> = ({
 				type="radio"
 				checked={checked}
 				name={name}
-				id={category.name}
+				id={type.name}
 				className="hidden"
-				onChange={() => onSelectItem?.(category)}
+				onChange={() => onSelectItem?.(type)}
 			/>
 			<label
 				className={jc(
 					"block p-2 bg-white/5 cursor-pointer hover:bg-white/10"
 				)}
-				htmlFor={category.name}
+				htmlFor={type.name}
 			>
-				{category.name}
+				{type.name}
 			</label>
 		</div>
 	);

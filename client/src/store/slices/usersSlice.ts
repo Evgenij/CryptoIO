@@ -1,12 +1,12 @@
 import { buildCreateSlice, asyncThunkCreator } from "@reduxjs/toolkit";
-import { IUser } from "../../api/models/IUser";
-import AuthService from "../../services/AuthService";
+import { User } from "../../api/models/User";
+import AuthService from "../../api/services/AuthService";
 import axios from "axios";
 import { IAuthResponse } from "../../api/models/response/IAuthResponse";
 import { API_URL } from "../../api";
 
 export interface IUserSliceState {
-	data: IUser | null | undefined;
+	data: User | null | undefined;
 	isAuth: boolean;
 	loading: boolean;
 	error: string | null | undefined;
@@ -23,8 +23,8 @@ const createAppSlice = buildCreateSlice({
 	creators: { asyncThunk: asyncThunkCreator },
 });
 
-const userSlice = createAppSlice({
-	name: "user",
+const usersSlice = createAppSlice({
+	name: "users",
 	initialState,
 	reducers: (create) => ({
 		setAuth: create.reducer<boolean>((state, action) => {
@@ -132,7 +132,7 @@ const userSlice = createAppSlice({
 				fulfilled: (state) => {
 					state.isAuth = false;
 					state.loading = false;
-					state.data = {} as IUser;
+					state.data = {} as User;
 				},
 			}
 		),
@@ -142,7 +142,7 @@ const userSlice = createAppSlice({
 					console.log("Check Auth");
 
 					const response = await axios.get<IAuthResponse>(
-						`${API_URL}/user/refresh`,
+						`${API_URL}/users/refresh`,
 						{ withCredentials: true }
 					);
 					localStorage.setItem(
@@ -177,8 +177,8 @@ const userSlice = createAppSlice({
 		getUserData: create.asyncThunk(
 			async (id: number) => {
 				try {
-					const response = await axios.get<IUser>(
-						`${API_URL}/user/${id}`
+					const response = await axios.get<User>(
+						`${API_URL}/users/${id}`
 					);
 
 					return response.data;
@@ -203,5 +203,5 @@ const userSlice = createAppSlice({
 	}),
 });
 export const { login, logout, registration, checkAuth, getUserData } =
-	userSlice.actions;
-export default userSlice.reducer;
+	usersSlice.actions;
+export default usersSlice.reducer;

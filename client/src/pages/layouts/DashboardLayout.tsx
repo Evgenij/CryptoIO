@@ -11,7 +11,7 @@ interface Props {
 
 export const DashboardLayout: FC<Props> = () => {
 	// state
-	const isAuth = useSelector((state: any) => state.user.isAuth);
+	const isAuth = useSelector((state: any) => state.users.isAuth);
 	const route = useLocation();
 
 	// inner functions

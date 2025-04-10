@@ -4,13 +4,13 @@ import { Logo } from "../components/Logo";
 import { MenuButton } from "../components/ui";
 import { MINING_ROUTE } from "../router/routes";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "../store/slices/userSlice";
+import { getUserData } from "../store/slices/usersSlice";
 import { AppDispatch } from "../store";
 
 export const Menu: FC = () => {
 	// state
 	const [] = useState();
-	let user = useSelector((state: any) => state.user.data);
+	let user = useSelector((state: any) => state.users.data);
 	const dispatch = useDispatch<AppDispatch>();
 
 	// inner functions

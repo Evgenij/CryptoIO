@@ -27,8 +27,6 @@ export const ProductImageDisplay: FC<Props> = ({ className, image, level }) => {
 	const [] = useState<IData>({ key: "data" });
 	const borderColor = colorOfLevel[level];
 
-	console.log(borderColor);
-
 	// inner functions
 	const hexToRGB = (hex: string, alpha: number): string => {
 		let r = parseInt(hex.slice(1, 3), 16),

@@ -1,36 +1,33 @@
 import React, { FC, useState, useEffect } from "react";
 import { jc } from "../../../utils/joinClasses";
-import { GroupRadioButtons, Product } from "../../../components/ui";
+import { GroupRadioButtons } from "../../../components/ui";
 import { MultiSelect } from "primereact/multiselect";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../../store";
+import { getAllTypes, setSelectedType } from "../../../store/slices/typesSlice";
+import { Type } from "../../../api/models/Type";
+import { Skeleton } from "primereact/skeleton";
 
-interface Props {
-	className?: string;
-}
-
-interface IData {
-	key: string;
-}
-
-export const Shop: FC<Props> = ({ className }) => {
+export const Shop: FC = () => {
 	// state
-	const [] = useState<IData>({ key: "data" });
-	const [selectedCategory, setSelectedCategory] = useState<{
-		id: number;
-		name: string;
-	}>({
-		id: 1,
-		name: "RIGs",
-	});
-	const [selectedLevels, setSelectedLevels] = useState(null);
+	const dispatch = useDispatch<AppDispatch>();
+	const selectedType: Type = useSelector(
+		(state: any) => state.types.selectedType
+	);
+	const loadingTypes = useSelector((state: any) => state.types.loading);
+	const errorTypes = useSelector((state: any) => state.types.error);
+	const types: Type[] = useSelector((state: any) => state.types.items.data);
+	//const [selectedType, setSelectedType] = useState<TypeComponent | null>();
+	const [selectedLevels, setSelectedLevels] = useState([]);
 
 	const levels = [
-		{ name: "Gen.1", value: 1 },
-		{ name: "Gen.2", value: 2 },
-		{ name: "Gen.3", value: 3 },
-		{ name: "Gen.4", value: 4 },
-		{ name: "Gen.5", value: 5 },
-		{ name: "Gen.6", value: 6 },
-		{ name: "Gen.7", value: 7 },
+		{ name: "Gen n.1", value: 1 },
+		{ name: "Gen n.2", value: 2 },
+		{ name: "Gen n.3", value: 3 },
+		{ name: "Gen n.4", value: 4 },
+		{ name: "Gen n.5", value: 5 },
+		{ name: "Gen n.6", value: 6 },
+		{ name: "Gen n.7", value: 7 },
 	];
 
 	const products = [
@@ -99,45 +96,6 @@ export const Shop: FC<Props> = ({ className }) => {
 		},
 	];
 
-	const categories = [
-		{
-			id: 1,
-			name: "RIGs",
-		},
-		{
-			id: 2,
-			name: "Motherboards",
-		},
-		{
-			id: 3,
-			name: "CPUs",
-		},
-		{
-			id: 4,
-			name: "Thermal grease",
-		},
-		{
-			id: 5,
-			name: "FANs",
-		},
-		{
-			id: 6,
-			name: "GPUs",
-		},
-		{
-			id: 7,
-			name: "RAMs",
-		},
-		{
-			id: 8,
-			name: "SSDs",
-		},
-		{
-			id: 9,
-			name: "Power sup-s",
-		},
-	];
-
 	// inner functions
 	const someFunc = () => {};
 
@@ -145,28 +103,45 @@ export const Shop: FC<Props> = ({ className }) => {
 	const handlerChange: React.ChangeEventHandler<HTMLInputElement> = (
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {};
-	const handleSelectCategory = (item: { id: number; name: string }) => {
-		setSelectedCategory(item);
+	const handleSelectType = (item: Type) => {
+		dispatch(setSelectedType(item));
 	};
 
 	// hooks
 	useEffect(() => {
-		console.log(selectedLevels);
-	}, [selectedLevels]);
+		dispatch(getAllTypes());
+	}, []);
+
+	// setting default type
+	useEffect(() => {
+		if (types) {
+			dispatch(setSelectedType(types[0]));
+		}
+	}, [types]);
 
 	return (
-		<div className={jc(className, "flex gap-7")}>
+		<div className={jc("flex gap-7")}>
 			<aside className="min-w-1/6 bg-white/5">
 				<h2 className="bg-white/10 text-xl font-medium px-3 p-2">
 					Filters
 				</h2>
 				<div className="py-3 flex flex-col gap-3">
 					<section className="px-3">
-						<GroupRadioButtons
-							sourceData={categories}
-							selectedItem={selectedCategory}
-							onSelectItem={handleSelectCategory}
-						/>
+						{!loadingTypes ? (
+							<GroupRadioButtons
+								sourceData={types}
+								selectedItem={selectedType}
+								onSelectItem={handleSelectType}
+							/>
+						) : (
+							<div className="flex flex-col gap-2">
+								<Skeleton width="full"></Skeleton>
+								<Skeleton width="full"></Skeleton>
+								<Skeleton width="full"></Skeleton>
+								<Skeleton width="full"></Skeleton>
+								<Skeleton width="full"></Skeleton>
+							</div>
+						)}
 					</section>
 					<section className="px-3 flex flex-col gap-1">
 						<h3 className="text-sm ">Levels</h3>
@@ -186,16 +161,16 @@ export const Shop: FC<Props> = ({ className }) => {
 			<section className="w-full flex flex-col gap-4">
 				<h3 className="text-2xl font-bold">
 					<span className="text-primary">{"> "}</span>
-					{selectedCategory.name}
+					{selectedType?.name}
 				</h3>
 				<div className="products-list grid grid-cols-4 gap-4">
-					{products.map((product) => (
+					{/* {products.map((product) => (
 						<Product
 							key={product.id}
 							environment="shop"
 							data={product}
 						/>
-					))}
+					))} */}
 				</div>
 			</section>
 		</div>

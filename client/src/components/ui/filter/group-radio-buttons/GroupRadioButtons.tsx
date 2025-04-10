@@ -1,10 +1,11 @@
 import React, { FC, useEffect } from "react";
 import { jc } from "../../../../utils/joinClasses";
 import { RadioButton } from "./RadioButton/RadioButton";
+import { Type } from "../../../../api/models/Type";
 
 interface Props {
-	sourceData: { id: number; name: string }[];
-	selectedItem: { id: number; name: string };
+	sourceData: Type[];
+	selectedItem: Type;
 	onSelectItem: (item: Props["selectedItem"]) => void;
 	className?: string;
 }
@@ -30,15 +31,18 @@ export const GroupRadioButtons: FC<Props> = ({
 
 	return (
 		<div className={jc(className, "flex flex-col gap-2")}>
-			{sourceData.map((category) => (
-				<RadioButton
-					key={category.id}
-					onSelectItem={(selectedItem) => onSelectItem(selectedItem)}
-					checked={selectedItem?.id === category?.id}
-					name="category"
-					category={category}
-				/>
-			))}
+			{sourceData &&
+				sourceData.map((type) => (
+					<RadioButton
+						key={type.id}
+						onSelectItem={(selectedItem) =>
+							onSelectItem(selectedItem)
+						}
+						checked={selectedItem?.id === type?.id}
+						name="type"
+						type={type}
+					/>
+				))}
 		</div>
 	);
 };
