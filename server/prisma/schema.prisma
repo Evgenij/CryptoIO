@@ -169,7 +169,7 @@ model SupportComponent {
 model Specification {
   id        Int       @id @default(autoincrement())
   name      String    @unique
-  label     String    @unique
+  label     String?
   createdAt DateTime? @default(now())
   updateAt  DateTime? @updatedAt
 
@@ -180,7 +180,8 @@ model Specification {
 
 model SpecificComponent {
   id              Int            @id @default(autoincrement())
-  value           Float          @default(0)
+  value           String
+  isKey           Boolean        @default(false)
   createdAt       DateTime?      @default(now())
   updateAt        DateTime?      @updatedAt
   Specification   Specification? @relation(fields: [specificationId], references: [id])
