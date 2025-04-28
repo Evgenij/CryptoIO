@@ -1,7 +1,7 @@
 const { prisma } = require("./prismaClient");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
-const { types, manufacturers } = require("./seederConstants");
+const { types, manufacturers, specifications } = require("./seederConstants");
 
 const { getRandomInt } = require("../utils/getRandomInt");
 
@@ -47,16 +47,12 @@ async function main() {
 	const typesFromDB = await prisma.type.findMany();
 	const manufacturersFromDB = await prisma.manufacturer.findMany();
 
-	await prisma.component.deleteMany();
-
 	typesFromDB.forEach(async (type) => {
 		for (let i = 1; i <= 2; i++) {
 			await prisma.component.upsert({
 				where: {
 					name: `${type.name}-${
-						manufacturersFromDB[
-							getRandomInt(0, manufacturersFromDB.length - 1)
-						].name
+						manufacturersFromDB[manufacturersFromDB.length - 1].name
 					}`,
 				},
 				update: {},
@@ -86,6 +82,38 @@ async function main() {
 				},
 			});
 		}
+	});
+
+	const componentsFromDB = await prisma.component.findMany();
+
+	//---------- specifications
+	specifications.forEach(async (specification) => {
+		await prisma.specification.upsert({
+			where: { name: specification.name },
+			update: {},
+			create: {
+				name: specification.name,
+				label: specification.label,
+			},
+		});
+	});
+
+	const specificationsFromDB = await prisma.specification.findMany();
+
+	console.log(specificationsFromDB.length, componentsFromDB.length);
+
+	//---------- specifications for components
+	componentsFromDB.forEach(async (component) => {
+		specificationsFromDB.forEach(async (specification) => {
+			await prisma.specificComponent.create({
+				data: {
+					componentId: component.id,
+					specificationId: specification.id,
+					value: `${component.name} sp[${specification.name}]`,
+					isKey: Math.random() < 0.5, // random boolean
+				},
+			});
+		});
 	});
 }
 
